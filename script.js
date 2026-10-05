@@ -30,32 +30,42 @@ const acts = [
     {
         kicker: "Babak I · Persembahan pembuka",
         title: "Panyembrama",
-        description: "Pelita dinyalakan dan lingkaran penyuara membuka perjalanan dengan doa serta sambutan. Suasana senja perlahan menjadi panggung bagi kisah Ramayana.",
+        description: "Adegan pembuka berupa ritual pembersihan arena dan pemujaan keselamatan. Puluhan penari pria duduk melingkar, memanjatkan doa bersama pemangku, lalu membangun keharmonisan ritme vokal cak-cak-cak secara polifonik yang menjadi musik pengiring alami sepanjang pertunjukan.",
         time: "18:00 WITA",
+        image: "assets/figma/hero-ceremony.png",
+        imageAlt: "Pertunjukan Kecak di tebing Uluwatu",
     },
     {
         kicker: "Babak II · Lembayung",
         title: "Hutan Dandaka",
-        description: "Rama, Sita, dan Laksmana memasuki hutan pengasingan. Lapisan suara membangun suasana rimba dan pertanda buruk yang mendekat.",
+        description: "Menggambarkan masa pengasingan Sang Rama, Dewi Sita, dan Laksmana di tengah Hutan Dandaka. Suasana adegan ini menonjolkan kedamaian, kesetiaan, serta keharmonisan hidup sederhana mereka di alam bebas sebelum konflik utama dimulai.",
         time: "18:15 WITA",
+        image: "assets/figma/hutan-dandaka.jpg",
+        imageAlt: "Rama, Sita, dan Laksmana berjalan memasuki Hutan Dandaka",
     },
     {
         kicker: "Babak III · Temaram",
         title: "Kijang Kencana",
-        description: "Kijang ajaib memancing Sita menjauh dari perlindungan. Intrik Rahwana mengubah ketenangan menjadi awal penculikan.",
+        description: "Awal munculnya petaka dalam cerita. Marica menyamar menjadi sosok kijang berbulu emas yang sangat indah atas perintah Rahwana. Pesona kijang tersebut memikat hati Sita hingga meminta Rama mengejarnya, yang mengakibatkan Rama dan Laksmana terpisah jauh dari area perlindungan Sita.",
         time: "18:30 WITA",
+        image: "assets/figma/kijang-kencana.jpg",
+        imageAlt: "Sita menunjuk kijang emas saat Rama dan Laksmana berada di hutan",
     },
     {
         kicker: "Babak IV · Senja gelap",
         title: "Penculikan Sita",
-        description: "Rahwana membawa Sita ke Alengka. Seruan para penyuara mengiringi perpisahan dan perjalanan Rama untuk menemukan kembali sang istri.",
+        description: "Rahwana memanfaatkan kelengaian situasi dengan menyamar sebagai pertapa tua untuk memperdaya Sita, lalu menculiknya terbang menuju Kerajaan Alengka. Burung Jatayu sempat datang menghadang dan bertarung sengit di udara demi menyelamatkan Sita, namun akhirnya gugur akibat tebas senjata Rahwana.",
         time: "18:45 WITA",
+        image: "assets/figma/penculikan-sita.jpg",
+        imageAlt: "Rahwana menculik Sita menuju Kerajaan Alengka",
     },
     {
         kicker: "Babak V · Ujian api",
         title: "Klimaks Sakral",
-        description: "Hanoman menerobos benteng Alengka. Nyala api dan paduan suara mencapai klimaks dalam kemenangan dharma atas adharma.",
+        description: "Puncak pertunjukan yang memadukan aksi dramatis dan nilai tradisi spiritual. Adegan ini menampilkan aksi Hanoman mengamuk menerobos kobaran api, yang sering kali dipadukan dengan tradisi Sanghyang di mana penari bergerak di atas bara api sebagai simbol pembersihan dan pengusiran energi negatif dari arena.",
         time: "19:00 WITA",
+        image: "assets/figma/klimaks.jpg",
+        imageAlt: "Hanoman dan pasukan Rama bertempur melawan Rahwana di Alengka",
     },
 ];
 
@@ -64,6 +74,7 @@ const actKicker = document.querySelector("[data-act-kicker]");
 const actTitle = document.querySelector("[data-act-title]");
 const actDescription = document.querySelector("[data-act-description]");
 const actTime = document.querySelector("[data-act-time]");
+const actImage = document.querySelector("[data-act-image]");
 const actCounter = document.querySelector(".act-feature-meta span:last-child");
 
 actTabs.forEach((tab) => {
@@ -82,6 +93,10 @@ actTabs.forEach((tab) => {
         if (actTitle) actTitle.textContent = act.title;
         if (actDescription) actDescription.textContent = act.description;
         if (actTime) actTime.textContent = act.time;
+        if (actImage) {
+            actImage.src = act.image;
+            actImage.alt = act.imageAlt;
+        }
         if (actCounter) actCounter.textContent = `${String(index + 1).padStart(2, "0")} / 05`;
     });
 });
@@ -128,27 +143,72 @@ layerTabs.forEach((tab) => {
 
 const audioButtons = [...document.querySelectorAll("[data-audio-toggle]")];
 const audioBar = document.querySelector(".floating-audio");
+const ritualAudio = document.querySelector("#ritual-audio");
 const interfaceStatus = document.querySelector("#interface-status");
-let audioDemoActive = false;
+const audioLabels = [...document.querySelectorAll("[data-audio-label]")];
+const audioPlayGlyph = document.querySelector(".play-glyph");
+const audioPlayButton = document.querySelector(".audio-play");
+
+audioLabels.forEach((label) => {
+    label.dataset.defaultLabel = label.textContent.trim();
+});
+
+function updateAudioControls(isPlaying) {
+    audioButtons.forEach((button) => button.setAttribute("aria-pressed", String(isPlaying)));
+    audioBar?.classList.toggle("is-playing", isPlaying);
+
+    audioLabels.forEach((label) => {
+        label.textContent = isPlaying ? "Sedang diputar" : label.dataset.defaultLabel || "Audio ritual langsung";
+    });
+
+    if (audioPlayGlyph) audioPlayGlyph.textContent = isPlaying ? "Ⅱ" : "▶";
+    audioPlayButton?.setAttribute("aria-label", isPlaying ? "Jeda audio ritual" : "Putar audio ritual");
+}
 
 audioButtons.forEach((button) => {
     button.addEventListener("click", () => {
-        audioDemoActive = !audioDemoActive;
-        audioButtons.forEach((item) => item.setAttribute("aria-pressed", String(audioDemoActive)));
-        audioBar?.classList.toggle("is-playing", audioDemoActive);
-        document.querySelectorAll("[data-audio-label]").forEach((label) => {
-            label.textContent = audioDemoActive ? "Pratinjau ritme aktif" : label.dataset.defaultLabel || "Audio ritual langsung";
-        });
-        if (interfaceStatus) {
-            interfaceStatus.textContent = audioDemoActive
-                ? "Animasi pratinjau audio aktif. File audio belum disertakan."
-                : "Animasi pratinjau audio dijeda.";
+        if (!(ritualAudio instanceof HTMLAudioElement)) {
+            if (interfaceStatus) interfaceStatus.textContent = "Pemutar audio tidak tersedia di halaman ini.";
+            return;
+        }
+
+        if (ritualAudio.paused || ritualAudio.ended) {
+            if (ritualAudio.ended) ritualAudio.currentTime = 0;
+            ritualAudio.play().catch((error) => {
+                if (interfaceStatus) {
+                    interfaceStatus.textContent = error.name === "NotAllowedError"
+                        ? "Pemutaran audio diblokir browser. Silakan tekan tombol putar lagi."
+                        : "Audio tidak dapat diputar. Periksa file audio dan coba lagi.";
+                }
+            });
+        } else {
+            ritualAudio.pause();
         }
     });
 });
 
-document.querySelectorAll("[data-audio-label]").forEach((label) => {
-    label.dataset.defaultLabel = label.textContent.trim();
+ritualAudio?.addEventListener("playing", () => {
+    updateAudioControls(true);
+    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak sedang diputar.";
+});
+
+ritualAudio?.addEventListener("pause", () => {
+    updateAudioControls(false);
+    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak dijeda.";
+});
+
+ritualAudio?.addEventListener("ended", () => {
+    updateAudioControls(false);
+    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak selesai diputar.";
+});
+
+ritualAudio?.addEventListener("waiting", () => {
+    if (interfaceStatus) interfaceStatus.textContent = "Memuat audio Tari Kecak...";
+});
+
+ritualAudio?.addEventListener("error", () => {
+    updateAudioControls(false);
+    if (interfaceStatus) interfaceStatus.textContent = "Audio gagal dimuat. Periksa koneksi dan file audio.";
 });
 
 const navLinks = [...document.querySelectorAll(".nav-pill a")];
@@ -171,3 +231,31 @@ if ("IntersectionObserver" in window) {
 
 const year = document.querySelector("#year");
 if (year) year.textContent = String(new Date().getFullYear());
+
+const customCursor = document.querySelector(".custom-cursor");
+const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+if (customCursor && finePointer.matches && !reducedMotion.matches) {
+    document.addEventListener("pointermove", (event) => {
+        customCursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
+        document.body.classList.add("cursor-ready");
+        customCursor.classList.toggle(
+            "is-hovering",
+            event.target instanceof Element && Boolean(event.target.closest("a, button, [role='button']")),
+        );
+    });
+
+    document.addEventListener("pointerdown", () => customCursor.classList.add("is-pressed"));
+    document.addEventListener("pointerup", () => customCursor.classList.remove("is-pressed"));
+    document.addEventListener("pointerout", (event) => {
+        if (!event.relatedTarget) {
+            document.body.classList.remove("cursor-ready");
+            customCursor.classList.remove("is-hovering", "is-pressed");
+        }
+    });
+    window.addEventListener("blur", () => {
+        document.body.classList.remove("cursor-ready");
+        customCursor.classList.remove("is-hovering", "is-pressed");
+    });
+}

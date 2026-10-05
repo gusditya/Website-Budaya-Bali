@@ -17,6 +17,9 @@
 </head>
 
 <body>
+    <div class="custom-cursor" aria-hidden="true">
+        <span class="custom-cursor-core"></span>
+    </div>
     <header class="site-header">
         <a class="brand" href="#beranda" aria-label="Kecak Bali — ke beranda">
             <span class="brand-mark"><img src="assets/figma/heritage-mark.png" alt=""></span>
@@ -57,7 +60,7 @@
                     <button class="button button-quiet" type="button" data-audio-toggle aria-pressed="false">
                         <span class="audio-symbol" aria-hidden="true">♫</span>
                         <span data-audio-label>Paduan suara Sanghyang</span>
-                        <small>04:12</small>
+                        <small>52:48</small>
                     </button>
                 </div>
                 <div class="hero-gallery" aria-label="Cuplikan ritual Kecak">
@@ -176,7 +179,7 @@
                             prada</span><strong>Topeng sakral Raja Dasamuka Rahwana</strong></figcaption>
                 </figure>
                 <div class="ramayana-copy">
-                    <span class="section-kicker">Mitologi utama <i>•</i> Pertempuran kosmis Alengka</span>
+                    <span class="section-kicker">Mitologi utama <i></i> Pertempuran kosmis Alengka</span>
                     <h2 class="section-title" id="ramayana-title">Kehormatan, Pengkhianatan<br><em>&amp; Lompatan Sakral
                             Hanoman</em></h2>
                     <p>Di tengah pusaran vokal menggelora, terbentang epos Hindu agung: Dewi Sinta diculik oleh raja
@@ -211,7 +214,7 @@
                     <div>
                         <span class="eyebrow"><i></i>Dramaturgi epos Ramayana · Alur lima babak</span>
                         <h2 class="section-title" id="acts-title">Panca Babak Sakral<br><em>Koreografi Senja
-                                &amp;<br>Malam Bara</em></h2>
+                                &amp; Malam Bara</em></h2>
                         <p>Dari pelita hening pembuka di kala temaram hingga letupan klimaks tendangan api penutup.
                             Simfoni vokal tujuh puluh pria bergerak serasi dengan detik-detik terbenamnya surya.</p>
                     </div>
@@ -240,13 +243,13 @@
                 </div>
                 <article class="act-feature panel" aria-live="polite">
                     <div class="act-feature-image">
-                        <img src="assets/figma/hero-ceremony.png" alt="Pertunjukan Kecak di tebing Uluwatu">
+                        <img src="assets/figma/hero-ceremony.png"
+                            alt="Pertunjukan Kecak di tebing Uluwatu" data-act-image>
                     </div>
                     <div class="act-feature-copy">
                         <span class="micro-label" data-act-kicker>Babak I · Persembahan pembuka</span>
                         <h3 data-act-title>Panyembrama</h3>
-                        <p data-act-description>Pelita dinyalakan dan lingkaran penyuara membuka perjalanan dengan doa
-                            serta sambutan. Suasana senja perlahan menjadi panggung bagi kisah Ramayana.</p>
+                        <p data-act-description>Adegan pembuka berupa ritual pembersihan arena dan pemujaan keselamatan. Puluhan penari pria duduk melingkar, memanjatkan doa bersama pemangku, lalu membangun keharmonisan ritme vokal cak-cak-cak secara polifonik yang menjadi musik pengiring alami sepanjang pertunjukan.</p>
                         <div class="act-feature-meta"><span>◷ <b data-act-time>18:00 WITA</b></span><span>01 / 05</span>
                         </div>
                     </div>
@@ -260,7 +263,7 @@
         <section class="section uluwatu" id="uluwatu" aria-labelledby="uluwatu-title">
             <div class="section-grid uluwatu-grid">
                 <div class="uluwatu-copy">
-                    <span class="section-kicker"><i class="temple-icon" aria-hidden="true">⌂</i> Koordinat tempat suci
+                    <span class="section-kicker"><i class="temple-icon" aria-hidden="true"></i> Koordinat tempat suci
                         di atas tebing</span>
                     <h2 class="section-title" id="uluwatu-title">Pura Luhur Uluwatu<br><em>70 Meter di Atas
                             Deburan<br>Samudra</em></h2>
@@ -284,11 +287,16 @@
                     </div>
                 </div>
                 <article class="map-card panel">
-                    <div class="map-visual"><img src="assets/figma/uluwatu-map.png"
-                            alt="Peta lokasi Pura Luhur Uluwatu di pesisir selatan Bali"><span
-                            class="map-coordinates">8.8290° S, 115.0847° E</span></div>
+                    <div class="map-visual">
+                        <iframe
+                            src="https://maps.google.com/maps?q=-8.8290%2C115.0847&amp;z=16&amp;output=embed"
+                            title="Peta Google Maps Pura Luhur Uluwatu, Bali"
+                            loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+                        <span class="map-coordinates">8.8290° S, 115.0847° E</span>
+                    </div>
                     <div class="map-caption">
-                        <h3>Pelataran Pertunjukan Uluwatu</h3>
+                        <h3>Pura Luhur Uluwatu</h3>
                         <p>Pecatu, Kuta Selatan, Kabupaten Badung, Bali</p>
                         <div><span>Pintu masuk dibuka: 17:00 WITA</span><strong>Kapasitas pelataran: 800
                                 penonton</strong></div>
@@ -394,6 +402,7 @@
         </section>
     </main>
 
+    <audio id="ritual-audio" preload="none" src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
     <aside class="floating-audio" aria-label="Kontrol audio ritual">
         <button class="audio-play" type="button" data-audio-toggle aria-label="Putar atau jeda audio ritual"
             aria-pressed="false"><span class="play-glyph" aria-hidden="true">▶</span></button>
@@ -407,11 +416,16 @@
         <div class="footer-inner">
             <div class="footer-main">
                 <section class="footer-intro" aria-label="Tentang warisan Kecak">
-                    <a class="footer-mark" href="#beranda" aria-label="Kecak Bali — ke beranda">
-                        <img src="assets/figma/heritage-mark.png" alt="">
-                    </a>
-                    <blockquote>“Napas kehidupan Bali, tempat mitos dan nyala api<br class="footer-quote-break">
-                        berpadu di ujung cakrawala dunia.”</blockquote>
+                    <div class="footer-branding">
+                        <div class="footer-brand">
+                            <a class="footer-mark" href="#beranda" aria-label="Kecak Bali — ke beranda">
+                                <img src="assets/figma/heritage-mark.png" alt="">
+                            </a>
+                            <h4>Kecak Bali</h4>
+                        </div>
+                        <blockquote>“Napas kehidupan Bali, tempat mitos dan nyala api<br class="footer-quote-break">
+                            berpadu di ujung cakrawala dunia.”</blockquote>
+                    </div>
                     <p>Didedikasikan untuk pelestarian dan pewarisan autentik musik sakral,<br
                             class="footer-copy-break"> dramaturgi tari, dan perlindungan pura di bawah naungan Desa Adat
                         Pecatu.</p>
@@ -420,10 +434,22 @@
                 <section class="footer-column footer-calendar" aria-labelledby="footer-calendar-title">
                     <h2 id="footer-calendar-title">Kalender Sakral Bali</h2>
                     <dl>
-                        <div><dt>Tahun Saka</dt><dd>1946&nbsp; Caka</dd></div>
-                        <div><dt>Sasih Berjalan</dt><dd>Sasih Kedasa</dd></div>
-                        <div><dt>Purnama Berikutnya</dt><dd class="footer-highlight">Wuku Medangsia</dd></div>
-                        <div><dt>Prasasti UNESCO</dt><dd>Daftar Perwakilan (2015)</dd></div>
+                        <div>
+                            <dt>Tahun Saka</dt>
+                            <dd>1946&nbsp; Caka</dd>
+                        </div>
+                        <div>
+                            <dt>Sasih Berjalan</dt>
+                            <dd>Sasih Kedasa</dd>
+                        </div>
+                        <div>
+                            <dt>Purnama Berikutnya</dt>
+                            <dd class="footer-highlight">Wuku Medangsia</dd>
+                        </div>
+                        <div>
+                            <dt>Prasasti UNESCO</dt>
+                            <dd>Daftar Perwakilan (2015)</dd>
+                        </div>
                     </dl>
                 </section>
 
@@ -452,4 +478,5 @@
 
     <p class="visually-hidden" id="interface-status" aria-live="polite"></p>
 </body>
+
 </html>
