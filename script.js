@@ -26,6 +26,17 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeNavigation();
 });
 
+const ribbonToggle = document.querySelector("[data-ribbon-toggle]");
+const transitionRibbon = document.querySelector(".transition-ribbon");
+
+ribbonToggle?.addEventListener("click", () => {
+    const paused = transitionRibbon?.classList.toggle("is-paused") ?? false;
+    ribbonToggle.setAttribute("aria-pressed", String(paused));
+    ribbonToggle.setAttribute("aria-label", paused ? "Lanjutkan teks berjalan" : "Jeda teks berjalan");
+    const glyph = ribbonToggle.querySelector("span");
+    if (glyph) glyph.textContent = paused ? "▶" : "Ⅱ";
+});
+
 const acts = [
     {
         kicker: "Babak I · Persembahan pembuka",
@@ -98,46 +109,6 @@ actTabs.forEach((tab) => {
             actImage.alt = act.imageAlt;
         }
         if (actCounter) actCounter.textContent = `${String(index + 1).padStart(2, "0")} / 05`;
-    });
-});
-
-const soundLayers = [
-    {
-        title: "Juru Tare / Pung (Fondasi Bass)",
-        description: "Mendengungkan nada rendah yang mensimulasikan tabuhan gong kempur secara siklikal, menjaga trance melingkar.",
-    },
-    {
-        title: "Cak Kotekan Interlocking",
-        description: "Pola cak yang saling menyahut membentuk jalinan ritme silang dan menjaga denyut pertunjukan tetap bergerak.",
-    },
-    {
-        title: "Sir / Desisan Tinggi",
-        description: "Lapisan desisan memberi aksen cepat di atas fondasi bass, menambah ketegangan pada setiap babak.",
-    },
-    {
-        title: "Juru Tembang & Krama",
-        description: "Pelantun kidung dan pengarah lakon mengikat melodi, narasi, dan respons lingkaran penyuara.",
-    },
-];
-
-const layerTabs = [...document.querySelectorAll(".sound-layer")];
-const layerTitle = document.querySelector("[data-layer-title]");
-const layerDescription = document.querySelector("[data-layer-description]");
-
-layerTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-        const index = Number(tab.dataset.layer);
-        const layer = soundLayers[index];
-        if (!layer) return;
-
-        layerTabs.forEach((item, itemIndex) => {
-            const selected = itemIndex === index;
-            item.classList.toggle("is-active", selected);
-            item.setAttribute("aria-selected", String(selected));
-        });
-
-        if (layerTitle) layerTitle.textContent = layer.title;
-        if (layerDescription) layerDescription.textContent = layer.description;
     });
 });
 
