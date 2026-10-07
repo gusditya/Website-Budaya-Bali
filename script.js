@@ -112,6 +112,104 @@ actTabs.forEach((tab) => {
     });
 });
 
+const kawiPassages = [
+    {
+        label: "Bahasa Kawi Jawa Kuno · adaptasi",
+        verse: "“Om ksamam mam mahadewa, sarwaprani hitankara. Mamoca sarwa papebhyah, palayaswa sadasiwa.”",
+        meter: "Metrum: Wirama Sardulawikridita",
+        singer: "Dilantunkan: Juru Kidung & lingkaran cak",
+        translation: "“Ya Hyang Mahadewa Penguasa Semesta, limpahkanlah ampunan dan kedamaian bagi segenap makhluk ciptaan-Mu. Bebaskan kami dari noda kenistaan dunia, lindungilah kami di bawah naungan kesucian abadi Sanghyang Sadasiwa.”",
+        context: "Kidung pembuka mandala sebelum lingkaran penari membentuk lingkaran konsentris. Bertujuan menyucikan pelataran dari kekuatan bhuta kala agar pertunjukan diberkahi keselamatan.",
+        vocals: ["[Solo Juru Krama]", "Cak-1 (Penyelag)", "Cak-2 (Pengoceh)", "Pung! (Juru Bass)"],
+    },
+    {
+        label: "Bahasa Kawi Jawa Kuno · adaptasi",
+        verse: "“Hana pwa ya marga nira sang ksatria wira. Rupanira kancana mriga lumampah ring alas Dandaka, mangoda manah nira Dewi Janaki.”",
+        meter: "Metrum: Wirama Sardulawikridita",
+        singer: "Dilantunkan: Juru Kidung & lingkaran cak",
+        translation: "“Tersebutlah jalan yang ditempuh sang ksatria agung. Tampak kijang kencana berlari anggun di rimba Dandaka, memikat dan menggoda hasrat batin Sang Dewi Janaki (Sinta) untuk memilikinya.”",
+        context: "Babak penculikan. Rahwana memerintahkan patih Marica menyamar menjadi Kijang Emas guna memancing Prabu Rama dan Laksamana meninggalkan gubuk pelindung Sinta.",
+        vocals: ["[Solo Juru Krama]", "Cak-1 (Penyelag)", "Cak-2 (Bayang)", "Cak! (Denyut hutan)"],
+    },
+    {
+        label: "Bahasa Kawi Jawa Kuno · adaptasi",
+        verse: "“Mulat sang Hanoman ring sang dyah, sedih manganti wacana Rama. Cihna ali-ali mas kencana katur ring sang ayu, lila ical lara nira.”",
+        meter: "Metrum: Wirama Sardulawikridita",
+        singer: "Dilantunkan: Juru Kidung & lingkaran cak",
+        translation: "“Maka memandanglah sang Hanoman kepada sang dewi yang lara menanti kabar suaminya. Diserahkan cincin emas kencana lambang cinta Rama, seketika sirnalah kepedihan batin sang putri suci.”",
+        context: "Pertemuan rahasia di Taman Asoka. Hanoman menyelinap memanjat pohon nagasari untuk menguji kesetiaan Dewi Sinta sebelum memorak-porandakan istana Alengka.",
+        vocals: ["[Solo Juru Krama]", "Cak-1 (Penyelag)", "Cak-2 (Tipu daya)", "Pung! (Tanda bahaya)"],
+    },
+    {
+        label: "Bahasa Kawi Jawa Kuno · adaptasi",
+        verse: "“Gumawe apuy sang Dasamuka, pinangan dening sang kapi kencana. Tan dadi awu anging dadi kembang, obong Alengka dening Hanoman.”",
+        meter: "Metrum: Wirama Sardulawikridita",
+        singer: "Dilantunkan: Juru Kidung / Dalang",
+        translation: "“Dinyalakan api yang menjilat-jilat oleh Dasamuka, namun api itu justru disantap oleh sang kera emas. Tubuhnya tak menjadi abu melainkan semerbak bunga, hingga api itu dilemparkan membumihanguskan benteng Alengka.”",
+        context: "Babak Hanoman Obong. Ekor Hanoman dililit sabut kelapa menyala, namun dengan kesaktian Bayu ia justru menari dan menendang bara api ke penjuru benteng Alengka.",
+        vocals: ["[Solo Juru Krama]", "Cak-1 (Penyelag)", "Cak-2 (Pengoceh)", "Pung! (Juru Bass)"],
+    },
+];
+
+const kawiTabs = [...document.querySelectorAll("[data-kawi-tab]")];
+const kawiPanel = document.querySelector("#kawi-panel");
+const kawiVerseLabel = document.querySelector("[data-kawi-verse-label]");
+const kawiVerse = document.querySelector("[data-kawi-verse]");
+const kawiMeter = document.querySelector("[data-kawi-meter]");
+const kawiSinger = document.querySelector("[data-kawi-singer]");
+const kawiTranslation = document.querySelector("[data-kawi-translation]");
+const kawiContext = document.querySelector("[data-kawi-context]");
+const kawiVocals = document.querySelector("[data-kawi-vocals]");
+
+function selectKawiPassage(index, moveFocus = false) {
+    const passage = kawiPassages[index];
+    const selectedTab = kawiTabs[index];
+    if (!passage || !selectedTab) return;
+
+    kawiTabs.forEach((tab, tabIndex) => {
+        const selected = tabIndex === index;
+        tab.classList.toggle("is-active", selected);
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+    });
+
+    if (moveFocus) selectedTab.focus();
+    if (kawiPanel) kawiPanel.setAttribute("aria-labelledby", selectedTab.id);
+    if (kawiVerseLabel) kawiVerseLabel.textContent = passage.label;
+    if (kawiVerse) kawiVerse.textContent = passage.verse;
+    if (kawiMeter) kawiMeter.textContent = passage.meter;
+    if (kawiSinger) kawiSinger.textContent = passage.singer;
+    if (kawiTranslation) kawiTranslation.textContent = passage.translation;
+    if (kawiContext) kawiContext.textContent = passage.context;
+    if (kawiVocals) {
+        kawiVocals.replaceChildren(...passage.vocals.map((part, partIndex) => {
+            const role = document.createElement(partIndex === passage.vocals.length - 1 ? "strong" : "span");
+            role.textContent = part;
+            return role;
+        }));
+    }
+}
+
+kawiTabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => selectKawiPassage(index));
+    tab.addEventListener("keydown", (event) => {
+        let nextIndex;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+            nextIndex = (index + 1) % kawiTabs.length;
+        } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+            nextIndex = (index - 1 + kawiTabs.length) % kawiTabs.length;
+        } else if (event.key === "Home") {
+            nextIndex = 0;
+        } else if (event.key === "End") {
+            nextIndex = kawiTabs.length - 1;
+        } else {
+            return;
+        }
+        event.preventDefault();
+        selectKawiPassage(nextIndex, true);
+    });
+});
+
 const audioButtons = [...document.querySelectorAll("[data-audio-toggle]")];
 const audioBar = document.querySelector(".floating-audio");
 const ritualAudio = document.querySelector("#ritual-audio");
