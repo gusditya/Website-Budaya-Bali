@@ -217,6 +217,35 @@ const interfaceStatus = document.querySelector("#interface-status");
 const audioLabels = [...document.querySelectorAll("[data-audio-label]")];
 const audioPlayGlyph = document.querySelector(".play-glyph");
 const audioPlayButton = document.querySelector(".audio-play");
+const sanghyangPlayer = document.querySelector(".sanghyang-player");
+const audioTrackName = ritualAudio?.dataset.trackName || "Tari Kecak";
+const audioSeek = document.querySelector(".sanghyang-audio-seek");
+const audioCurrentTime = document.querySelector("[data-audio-current-time]");
+const audioDuration = document.querySelector("[data-audio-duration]");
+
+function formatAudioTime(time) {
+    if (!Number.isFinite(time) || time < 0) return "--:--";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function updateAudioProgress() {
+    if (!(ritualAudio instanceof HTMLAudioElement)) return;
+
+    const duration = ritualAudio.duration;
+    const progress = Number.isFinite(duration) && duration > 0
+        ? (ritualAudio.currentTime / duration) * 100
+        : 0;
+
+    if (audioCurrentTime) audioCurrentTime.textContent = formatAudioTime(ritualAudio.currentTime);
+    if (audioDuration) audioDuration.textContent = formatAudioTime(duration);
+    if (audioSeek) {
+        audioSeek.value = String(progress);
+        audioSeek.disabled = !Number.isFinite(duration) || duration <= 0;
+        audioSeek.style.setProperty("--audio-progress", `${progress}%`);
+    }
+}
 
 audioLabels.forEach((label) => {
     label.dataset.defaultLabel = label.textContent.trim();
@@ -225,13 +254,18 @@ audioLabels.forEach((label) => {
 function updateAudioControls(isPlaying) {
     audioButtons.forEach((button) => button.setAttribute("aria-pressed", String(isPlaying)));
     audioBar?.classList.toggle("is-playing", isPlaying);
+    sanghyangPlayer?.classList.toggle("is-playing", isPlaying);
 
     audioLabels.forEach((label) => {
+        if (sanghyangPlayer?.contains(label)) return;
         label.textContent = isPlaying ? "Sedang diputar" : label.dataset.defaultLabel || "Audio ritual langsung";
     });
 
     if (audioPlayGlyph) audioPlayGlyph.textContent = isPlaying ? "Ⅱ" : "▶";
-    audioPlayButton?.setAttribute("aria-label", isPlaying ? "Jeda audio ritual" : "Putar audio ritual");
+    audioPlayButton?.setAttribute(
+        "aria-label",
+        `${isPlaying ? "Jeda" : "Putar"} ${audioTrackName}`,
+    );
 }
 
 audioButtons.forEach((button) => {
@@ -247,7 +281,7 @@ audioButtons.forEach((button) => {
                 if (interfaceStatus) {
                     interfaceStatus.textContent = error.name === "NotAllowedError"
                         ? "Pemutaran audio diblokir browser. Silakan tekan tombol putar lagi."
-                        : "Audio tidak dapat diputar. Periksa file audio dan coba lagi.";
+                        : `${audioTrackName} tidak dapat diputar. Periksa file audio dan coba lagi.`;
                 }
             });
         } else {
@@ -258,31 +292,39 @@ audioButtons.forEach((button) => {
 
 ritualAudio?.addEventListener("playing", () => {
     updateAudioControls(true);
-    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak sedang diputar.";
+    if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} sedang diputar.`;
 });
 
 ritualAudio?.addEventListener("pause", () => {
     updateAudioControls(false);
-    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak dijeda.";
+    if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} dijeda.`;
 });
 
 ritualAudio?.addEventListener("ended", () => {
     updateAudioControls(false);
-    if (interfaceStatus) interfaceStatus.textContent = "Audio Tari Kecak selesai diputar.";
+    if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} selesai diputar.`;
 });
 
 ritualAudio?.addEventListener("waiting", () => {
-    if (interfaceStatus) interfaceStatus.textContent = "Memuat audio Tari Kecak...";
+    if (interfaceStatus) interfaceStatus.textContent = `Memuat ${audioTrackName}...`;
 });
 
 ritualAudio?.addEventListener("error", () => {
     updateAudioControls(false);
-    if (interfaceStatus) interfaceStatus.textContent = "Audio gagal dimuat. Periksa koneksi dan file audio.";
+    if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} gagal dimuat. Periksa koneksi dan file audio.`;
+});
+
+ritualAudio?.addEventListener("loadedmetadata", updateAudioProgress);
+ritualAudio?.addEventListener("timeupdate", updateAudioProgress);
+audioSeek?.addEventListener("input", () => {
+    if (!(ritualAudio instanceof HTMLAudioElement) || !Number.isFinite(ritualAudio.duration)) return;
+    ritualAudio.currentTime = (Number(audioSeek.value) / 100) * ritualAudio.duration;
 });
 
 const navLinks = [...document.querySelectorAll(".nav-pill a")];
 const navSections = navLinks
-    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter((link) => link.getAttribute("href")?.startsWith("#"))
+    .map((link) => document.getElementById(link.getAttribute("href").slice(1)))
     .filter(Boolean);
 
 if ("IntersectionObserver" in window) {
@@ -290,12 +332,90 @@ if ("IntersectionObserver" in window) {
         entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             navLinks.forEach((link) => {
-                link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`);
+                link.classList.toggle(
+                    "is-active",
+                    link.getAttribute("href") === `#${entry.target.id}`,
+                );
             });
         });
     }, { rootMargin: "-30% 0px -60% 0px" });
 
     navSections.forEach((section) => navObserver.observe(section));
+
+    const sanghyangStageLinks = [...document.querySelectorAll(".sanghyang-stage-link")];
+    const sanghyangStages = [...document.querySelectorAll("[data-sanghyang-stage]")];
+    const stageLinksById = new Map(
+        sanghyangStageLinks.map((link) => [link.hash.slice(1), link]),
+    );
+
+    if (sanghyangStages.length && sanghyangStageLinks.length) {
+        const setActiveSanghyangStage = (stageId) => {
+            sanghyangStageLinks.forEach((link) => {
+                const isActive = link.hash === `#${stageId}`;
+                link.classList.toggle("is-active", isActive);
+                if (isActive) {
+                    link.setAttribute("aria-current", "location");
+                } else {
+                    link.removeAttribute("aria-current");
+                }
+            });
+        };
+
+        sanghyangStageLinks.forEach((link) => {
+            link.addEventListener("click", () => setActiveSanghyangStage(link.hash.slice(1)));
+        });
+
+        const sanghyangStageObserver = new IntersectionObserver((entries) => {
+            const visibleStage = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top)[0];
+
+            if (!visibleStage) return;
+
+            setActiveSanghyangStage(visibleStage.target.id);
+        }, { rootMargin: "-25% 0px -60% 0px" });
+
+        sanghyangStages.forEach((stage) => {
+            if (stageLinksById.has(stage.id)) sanghyangStageObserver.observe(stage);
+        });
+    }
+}
+
+const historyTimeline = document.querySelector("[data-history-timeline]");
+const timelineSpine = historyTimeline?.querySelector(".history-timeline-spine-fill");
+const timelineEvents = [...(historyTimeline?.querySelectorAll("[data-timeline-step]") ?? [])];
+
+if (historyTimeline && timelineSpine && timelineEvents.length) {
+    let timelineFrame = 0;
+
+    const updateTimelineProgress = () => {
+        timelineFrame = 0;
+        const spine = historyTimeline.querySelector(".history-timeline-spine");
+        if (!spine) return;
+
+        const spineRect = spine.getBoundingClientRect();
+        const progress = Math.min(
+            1,
+            Math.max(0, (window.innerHeight * 0.58 - spineRect.top) / spineRect.height),
+        );
+        timelineSpine.style.transform = `scaleY(${progress})`;
+
+        const revealLine = window.innerHeight * 0.58;
+        timelineEvents.forEach((event) => {
+            event.classList.toggle(
+                "is-reached",
+                event.getBoundingClientRect().top + event.offsetHeight * 0.5 <= revealLine,
+            );
+        });
+    };
+
+    const requestTimelineUpdate = () => {
+        if (!timelineFrame) timelineFrame = window.requestAnimationFrame(updateTimelineProgress);
+    };
+
+    window.addEventListener("scroll", requestTimelineUpdate, { passive: true });
+    window.addEventListener("resize", requestTimelineUpdate);
+    requestTimelineUpdate();
 }
 
 const year = document.querySelector("#year");
