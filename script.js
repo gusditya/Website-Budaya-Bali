@@ -444,12 +444,71 @@ if (historyTimeline && timelineSpine && timelineEvents.length) {
     requestTimelineUpdate();
 }
 
+const archiveViewer = document.querySelector("#archive-viewer");
+const archiveOpenButtons = [...document.querySelectorAll("[data-archive-open]")];
+let archiveOpener = null;
+
+archiveOpenButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        if (archiveViewer instanceof HTMLDialogElement && !archiveViewer.open) {
+            archiveOpener = button;
+            archiveViewer.showModal();
+            moveCustomCursorToArchive(true);
+        }
+    });
+});
+
+archiveViewer?.querySelector("[data-archive-close]")?.addEventListener("click", () => {
+    if (archiveViewer instanceof HTMLDialogElement) archiveViewer.close();
+});
+
+archiveViewer?.addEventListener("close", () => {
+    moveCustomCursorToArchive(false);
+    if (archiveOpener?.isConnected) archiveOpener.focus();
+    archiveOpener = null;
+});
+
+archiveViewer?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    if (archiveViewer instanceof HTMLDialogElement) archiveViewer.close();
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !(archiveViewer instanceof HTMLDialogElement) || !archiveViewer.open) return;
+    event.preventDefault();
+    archiveViewer.close();
+});
+
+archiveViewer?.addEventListener("click", (event) => {
+    if (event.target === archiveViewer && archiveViewer instanceof HTMLDialogElement) {
+        archiveViewer.close();
+    }
+});
+
 const year = document.querySelector("#year");
 if (year) year.textContent = String(new Date().getFullYear());
 
 const customCursor = document.querySelector(".custom-cursor");
+const customCursorParent = customCursor?.parentNode;
+const customCursorNextSibling = customCursor?.nextSibling;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function moveCustomCursorToArchive(isOpen) {
+    if (!(archiveViewer instanceof HTMLDialogElement) || !customCursor) return;
+
+    if (isOpen) {
+        archiveViewer.append(customCursor);
+        if (finePointer.matches && !reducedMotion.matches) {
+            document.body.classList.add("cursor-ready");
+        }
+    } else if (customCursor.parentNode === archiveViewer && customCursorParent) {
+        const nextSibling = customCursorNextSibling?.parentNode === customCursorParent
+            ? customCursorNextSibling
+            : null;
+        customCursorParent.insertBefore(customCursor, nextSibling);
+    }
+}
 
 if (customCursor && finePointer.matches && !reducedMotion.matches) {
     document.addEventListener("pointermove", (event) => {
@@ -457,7 +516,9 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
         document.body.classList.add("cursor-ready");
         customCursor.classList.toggle(
             "is-hovering",
-            event.target instanceof Element && Boolean(event.target.closest("a, button, [role='button']")),
+            event.target instanceof Element && Boolean(
+                event.target.closest("a, button, [role='button']"),
+            ),
         );
     });
 
@@ -465,6 +526,7 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
     document.addEventListener("pointerup", () => customCursor.classList.remove("is-pressed"));
     document.addEventListener("pointerout", (event) => {
         if (!event.relatedTarget) {
+            if (archiveViewer instanceof HTMLDialogElement && archiveViewer.open) return;
             document.body.classList.remove("cursor-ready");
             customCursor.classList.remove("is-hovering", "is-pressed");
         }
