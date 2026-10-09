@@ -1,3 +1,29 @@
+const pageLoader = document.querySelector(".page-loader");
+
+if (pageLoader) {
+    const loaderStartedAt = performance.now();
+    let loaderFinished = false;
+    let loaderFinishTimer;
+
+    const finishPageLoader = () => {
+        if (loaderFinished) return;
+        loaderFinished = true;
+        window.clearTimeout(loaderFinishTimer);
+
+        const minimumDisplayTime = 2200;
+        const elapsed = performance.now() - loaderStartedAt;
+        window.setTimeout(() => {
+            pageLoader.classList.add("is-leaving");
+            document.documentElement.classList.remove("has-page-loader");
+            window.setTimeout(() => pageLoader.remove(), 450);
+        }, Math.max(0, minimumDisplayTime - elapsed));
+    };
+
+    window.addEventListener("load", finishPageLoader, { once: true });
+    loaderFinishTimer = window.setTimeout(finishPageLoader, 2200);
+    if (document.readyState === "complete") finishPageLoader();
+}
+
 const menuButton = document.querySelector(".menu-toggle");
 const navigation = document.querySelector("#primary-nav");
 
