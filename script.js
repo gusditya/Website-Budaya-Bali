@@ -69,7 +69,7 @@ const acts = [
         title: "Panyembrama",
         description: "Adegan pembuka berupa ritual pembersihan arena dan pemujaan keselamatan. Puluhan penari pria duduk melingkar, memanjatkan doa bersama pemangku, lalu membangun keharmonisan ritme vokal cak-cak-cak secara polifonik yang menjadi musik pengiring alami sepanjang pertunjukan.",
         time: "18:00 WITA",
-        image: "assets/figma/hero-ceremony.png",
+        image: "assets/pictures/hero-ceremony.png",
         imageAlt: "Pertunjukan Kecak di tebing Uluwatu",
     },
     {
@@ -77,7 +77,7 @@ const acts = [
         title: "Hutan Dandaka",
         description: "Menggambarkan masa pengasingan Sang Rama, Dewi Sita, dan Laksmana di tengah Hutan Dandaka. Suasana adegan ini menonjolkan kedamaian, kesetiaan, serta keharmonisan hidup sederhana mereka di alam bebas sebelum konflik utama dimulai.",
         time: "18:15 WITA",
-        image: "assets/figma/hutan-dandaka.jpg",
+        image: "assets/pictures/hutan-dandaka.jpg",
         imageAlt: "Rama, Sita, dan Laksmana berjalan memasuki Hutan Dandaka",
     },
     {
@@ -85,7 +85,7 @@ const acts = [
         title: "Kijang Kencana",
         description: "Awal munculnya petaka dalam cerita. Marica menyamar menjadi sosok kijang berbulu emas yang sangat indah atas perintah Rahwana. Pesona kijang tersebut memikat hati Sita hingga meminta Rama mengejarnya, yang mengakibatkan Rama dan Laksmana terpisah jauh dari area perlindungan Sita.",
         time: "18:30 WITA",
-        image: "assets/figma/kijang-kencana.jpg",
+        image: "assets/pictures/kijang-kencana.jpg",
         imageAlt: "Sita menunjuk kijang emas saat Rama dan Laksmana berada di hutan",
     },
     {
@@ -93,7 +93,7 @@ const acts = [
         title: "Penculikan Sita",
         description: "Rahwana memanfaatkan kelengaian situasi dengan menyamar sebagai pertapa tua untuk memperdaya Sita, lalu menculiknya terbang menuju Kerajaan Alengka. Burung Jatayu sempat datang menghadang dan bertarung sengit di udara demi menyelamatkan Sita, namun akhirnya gugur akibat tebas senjata Rahwana.",
         time: "18:45 WITA",
-        image: "assets/figma/penculikan-sita.jpg",
+        image: "assets/pictures/penculikan-sita.jpg",
         imageAlt: "Rahwana menculik Sita menuju Kerajaan Alengka",
     },
     {
@@ -101,7 +101,7 @@ const acts = [
         title: "Klimaks Sakral",
         description: "Puncak pertunjukan yang memadukan aksi dramatis dan nilai tradisi spiritual. Adegan ini menampilkan aksi Hanoman mengamuk menerobos kobaran api, yang sering kali dipadukan dengan tradisi Sanghyang di mana penari bergerak di atas bara api sebagai simbol pembersihan dan pengusiran energi negatif dari arena.",
         time: "19:00 WITA",
-        image: "assets/figma/klimaks.jpg",
+        image: "assets/pictures/klimaks.jpg",
         imageAlt: "Hanoman dan pasukan Rama bertempur melawan Rahwana di Alengka",
     },
 ];
@@ -536,3 +536,90 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
         customCursor.classList.remove("is-hovering", "is-pressed");
     });
 }
+
+/* ==========================================================================
+   Bespoke Scroll Reveal Engine Component
+   Komponen animasi kemunculan saat scroll buatan sendiri tanpa library UI siap pakai,
+   memanfaatkan IntersectionObserver API dengan performa 60fps & fallback aman.
+   ========================================================================== */
+function initScrollReveal() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+    // Aktifkan styling animasi scroll pada dokumen
+    document.documentElement.classList.add("has-scroll-reveal");
+
+    // Selektor elemen dan section yang otomatis diberi animasi kemunculan saat discroll
+    const autoSelectors = [
+        "main > section",
+        "main > article",
+        ".panel",
+        ".wisdom-quote",
+        ".morphology-gallery-card",
+        ".morphology-card",
+        ".exploration-card",
+        ".act-card",
+        ".lore-card",
+        ".stat-cards article",
+        ".glossary-card",
+        ".character-card",
+        ".kawi-card",
+        ".costume-card",
+        ".history-section",
+        ".timeline-card",
+        ".archive-card",
+        ".monograph-card",
+        ".dramaturgi-next-card",
+        ".interactive-card",
+        ".history-closing",
+        ".footer-intro",
+        ".footer-column"
+    ];
+
+    const elementsToAnimate = document.querySelectorAll(autoSelectors.join(", "));
+    elementsToAnimate.forEach((el) => {
+        if (!el.hasAttribute("data-reveal") && !el.classList.contains("reveal-on-scroll")) {
+            el.classList.add("reveal-on-scroll");
+        }
+    });
+
+    const targets = document.querySelectorAll("[data-reveal], .reveal-on-scroll");
+    if (!targets.length) return;
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-revealed");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: "0px 0px -40px 0px",
+            threshold: 0.08
+        });
+
+        targets.forEach((target) => {
+            const rect = target.getBoundingClientRect();
+            // Jika elemen berada dalam viewport awal, munculkan dengan sedikit jeda halus
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                window.setTimeout(() => {
+                    target.classList.add("is-revealed");
+                }, 100);
+            } else {
+                observer.observe(target);
+            }
+        });
+    } else {
+        targets.forEach((target) => target.classList.add("is-revealed"));
+    }
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScrollReveal);
+} else {
+    initScrollReveal();
+}
+
