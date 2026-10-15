@@ -43,11 +43,12 @@
             <a href="index.html#beranda">Kosmologi &amp; Tradisi</a>
             <a class="is-active" href="Filosofi.html" aria-current="page">Filosofi</a>
             <a href="dramaturgi.html">Epik Ramayana</a>
+            <a href="panduan.html">Panduan Kunjungan</a>
             <a href="index.html#panca-babak">Panca Babak</a>
             <a href="index.html#uluwatu">Tebing Uluwatu</a>
         </nav>
         <div class="header-actions">
-            <button class="audio-trigger" type="button" data-audio-toggle aria-pressed="false">
+            <button class="audio-trigger" type="button" data-audio-toggle data-global-audio-toggle aria-pressed="false">
                 <span class="status-dot"></span><span class="audio-symbol" aria-hidden="true">♫</span>
                 <span data-audio-label>Audio ritual langsung</span>
             </button>
@@ -256,7 +257,7 @@
                     </header>
                     <div class="sanghyang-player">
                         <div class="sanghyang-player-copy">
-                            <button class="audio-play sanghyang-player-button" type="button" data-audio-toggle
+                            <button class="audio-play sanghyang-player-button" type="button" data-local-audio-toggle
                                 aria-label="Putar Kidung Sanghyang Dedari" aria-pressed="false">
                                 <span class="play-glyph" aria-hidden="true">▶</span>
                             </button>
@@ -600,8 +601,10 @@
         </section>
     </main>
 
-    <audio id="ritual-audio" preload="metadata" data-track-name="Kidung Sanghyang Dedari"
-        src="assets/audio/sanghyang-dedari.mp3"></audio>
+    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak"
+            src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
+        <audio id="sanghyang-audio" preload="metadata" data-track-name="Kidung Sanghyang Dedari"
+            src="assets/audio/sanghyang-dedari.mp3"></audio>
 
     <footer class="site-footer history-footer">
         <div class="footer-inner">

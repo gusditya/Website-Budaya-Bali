@@ -10,7 +10,7 @@ if (pageLoader) {
         loaderFinished = true;
         window.clearTimeout(loaderFinishTimer);
 
-        const minimumDisplayTime = 2200;
+        const minimumDisplayTime = 1500;
         const elapsed = performance.now() - loaderStartedAt;
         window.setTimeout(() => {
             pageLoader.classList.add("is-leaving");
@@ -236,19 +236,50 @@ kawiTabs.forEach((tab, index) => {
     });
 });
 
-const audioButtons = [...document.querySelectorAll("[data-audio-toggle]")];
+const audioButtons = [...document.querySelectorAll("[data-global-audio-toggle], [data-audio-toggle]:not([data-local-audio-toggle])")];
+const localAudioButtons = [...document.querySelectorAll("[data-local-audio-toggle]")];
 const audioBar = document.querySelector(".floating-audio");
 const ritualAudio = document.querySelector("#ritual-audio");
+const sanghyangAudio = document.querySelector("#sanghyang-audio");
 const interfaceStatus = document.querySelector("#interface-status");
 const audioLabels = [...document.querySelectorAll("[data-audio-label]")];
-const audioPlayGlyph = document.querySelector(".play-glyph");
-const audioPlayButton = document.querySelector(".audio-play");
+const audioPlayGlyph = document.querySelector(".floating-audio .play-glyph");
+const audioPlayButton = document.querySelector(".floating-audio .audio-play");
 const sanghyangPlayer = document.querySelector(".sanghyang-player");
 const audioTrackName = ritualAudio?.dataset.trackName || "Tari Kecak";
-const audioSeek = document.querySelector(".sanghyang-audio-seek");
-const audioCurrentTime = document.querySelector("[data-audio-current-time]");
-const audioDuration = document.querySelector("[data-audio-duration]");
+const audioTrackKey = ritualAudio?.currentSrc || ritualAudio?.getAttribute("src") || audioTrackName;
+const audioStateKey = "kecak-audio-state";
+const sanghyangSeek = sanghyangPlayer?.querySelector(".sanghyang-audio-seek") || null;
+const sanghyangCurrentTime = sanghyangPlayer?.querySelector("[data-audio-current-time]") || null;
+const sanghyangDuration = sanghyangPlayer?.querySelector("[data-audio-duration]") || null;
+const sanghyangPlayGlyph = sanghyangPlayer?.querySelector(".play-glyph") || null;
+const sanghyangPlayButton = sanghyangPlayer?.querySelector(".audio-play") || null;
+const ritualSeek = document.querySelector(".floating-audio .sanghyang-audio-seek") || null;
+const ritualCurrentTime = document.querySelector(".floating-audio [data-audio-current-time]") || null;
+const ritualDuration = document.querySelector(".floating-audio [data-audio-duration]") || null;
 
+function saveAudioState(isPlaying) {
+    if (!(ritualAudio instanceof HTMLAudioElement)) return;
+    sessionStorage.setItem(audioStateKey, JSON.stringify({
+        track: audioTrackKey,
+        time: ritualAudio.currentTime,
+        wasPlaying: isPlaying,
+    }));
+}
+
+function restoreAudioState() {
+    if (!(ritualAudio instanceof HTMLAudioElement)) return;
+    try {
+        const state = JSON.parse(sessionStorage.getItem(audioStateKey) || "null");
+        if (state?.track !== audioTrackKey || !Number.isFinite(state.time) || state.time <= 0) return;
+        ritualAudio.addEventListener("loadedmetadata", () => {
+            ritualAudio.currentTime = Math.min(state.time, Math.max(0, ritualAudio.duration - .1));
+            updateAudioProgress();
+        }, { once: true });
+    } catch {
+        sessionStorage.removeItem(audioStateKey);
+    }
+}
 function formatAudioTime(time) {
     if (!Number.isFinite(time) || time < 0) return "--:--";
     const minutes = Math.floor(time / 60);
@@ -256,21 +287,39 @@ function formatAudioTime(time) {
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-function updateAudioProgress() {
+function updateRitualProgress() {
     if (!(ritualAudio instanceof HTMLAudioElement)) return;
-
     const duration = ritualAudio.duration;
     const progress = Number.isFinite(duration) && duration > 0
         ? (ritualAudio.currentTime / duration) * 100
         : 0;
-
-    if (audioCurrentTime) audioCurrentTime.textContent = formatAudioTime(ritualAudio.currentTime);
-    if (audioDuration) audioDuration.textContent = formatAudioTime(duration);
-    if (audioSeek) {
-        audioSeek.value = String(progress);
-        audioSeek.disabled = !Number.isFinite(duration) || duration <= 0;
-        audioSeek.style.setProperty("--audio-progress", `${progress}%`);
+    if (ritualCurrentTime) ritualCurrentTime.textContent = formatAudioTime(ritualAudio.currentTime);
+    if (ritualDuration) ritualDuration.textContent = formatAudioTime(duration);
+    if (ritualSeek) {
+        ritualSeek.value = String(progress);
+        ritualSeek.disabled = !Number.isFinite(duration) || duration <= 0;
+        ritualSeek.style.setProperty("--audio-progress", `${progress}%`);
     }
+}
+
+function updateSanghyangProgress() {
+    if (!(sanghyangAudio instanceof HTMLAudioElement)) return;
+    const duration = sanghyangAudio.duration;
+    const progress = Number.isFinite(duration) && duration > 0
+        ? (sanghyangAudio.currentTime / duration) * 100
+        : 0;
+    if (sanghyangCurrentTime) sanghyangCurrentTime.textContent = formatAudioTime(sanghyangAudio.currentTime);
+    if (sanghyangDuration) sanghyangDuration.textContent = formatAudioTime(duration);
+    if (sanghyangSeek) {
+        sanghyangSeek.value = String(progress);
+        sanghyangSeek.disabled = !Number.isFinite(duration) || duration <= 0;
+        sanghyangSeek.style.setProperty("--audio-progress", `${progress}%`);
+    }
+}
+
+function updateAudioProgress() {
+    updateRitualProgress();
+    updateSanghyangProgress();
 }
 
 audioLabels.forEach((label) => {
@@ -280,7 +329,7 @@ audioLabels.forEach((label) => {
 function updateAudioControls(isPlaying) {
     audioButtons.forEach((button) => button.setAttribute("aria-pressed", String(isPlaying)));
     audioBar?.classList.toggle("is-playing", isPlaying);
-    sanghyangPlayer?.classList.toggle("is-playing", isPlaying);
+    sanghyangPlayer?.classList.remove("is-playing");
 
     audioLabels.forEach((label) => {
         if (sanghyangPlayer?.contains(label)) return;
@@ -294,6 +343,37 @@ function updateAudioControls(isPlaying) {
     );
 }
 
+function toggleAudioPlayer(audio, button, name) {
+    if (!(audio instanceof HTMLAudioElement)) return;
+    if (audio.paused || audio.ended) {
+        if (audio.ended) audio.currentTime = 0;
+        audio.play().catch(() => {});
+    } else {
+        audio.pause();
+    }
+    button?.setAttribute("aria-label", `${audio.paused ? "Putar" : "Jeda"} ${name}`);
+}
+
+localAudioButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const willPlay = sanghyangAudio?.paused || sanghyangAudio?.ended;
+        if (willPlay && ritualAudio && !ritualAudio.paused) ritualAudio.pause();
+        toggleAudioPlayer(sanghyangAudio, button, "Kidung Sanghyang Dedari");
+        if (sanghyangAudio && !sanghyangAudio.paused) {
+            sanghyangPlayer?.classList.add("is-playing");
+        } else {
+            sanghyangPlayer?.classList.remove("is-playing");
+        }
+    });
+});
+
+sanghyangAudio?.addEventListener("play", () => {
+    if (ritualAudio && !ritualAudio.paused) ritualAudio.pause();
+    sanghyangPlayer?.classList.add("is-playing");
+});
+sanghyangAudio?.addEventListener("pause", () => sanghyangPlayer?.classList.remove("is-playing"));
+sanghyangAudio?.addEventListener("ended", () => sanghyangPlayer?.classList.remove("is-playing"));
+
 audioButtons.forEach((button) => {
     button.addEventListener("click", () => {
         if (!(ritualAudio instanceof HTMLAudioElement)) {
@@ -302,6 +382,7 @@ audioButtons.forEach((button) => {
         }
 
         if (ritualAudio.paused || ritualAudio.ended) {
+            if (sanghyangAudio && !sanghyangAudio.paused) sanghyangAudio.pause();
             if (ritualAudio.ended) ritualAudio.currentTime = 0;
             ritualAudio.play().catch((error) => {
                 if (interfaceStatus) {
@@ -316,12 +397,16 @@ audioButtons.forEach((button) => {
     });
 });
 
+restoreAudioState();
+
 ritualAudio?.addEventListener("playing", () => {
+    saveAudioState(true);
     updateAudioControls(true);
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} sedang diputar.`;
 });
 
 ritualAudio?.addEventListener("pause", () => {
+    saveAudioState(false);
     updateAudioControls(false);
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} dijeda.`;
 });
@@ -340,11 +425,20 @@ ritualAudio?.addEventListener("error", () => {
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} gagal dimuat. Periksa koneksi dan file audio.`;
 });
 
-ritualAudio?.addEventListener("loadedmetadata", updateAudioProgress);
-ritualAudio?.addEventListener("timeupdate", updateAudioProgress);
-audioSeek?.addEventListener("input", () => {
+ritualAudio?.addEventListener("loadedmetadata", updateRitualProgress);
+ritualAudio?.addEventListener("timeupdate", () => {
+    updateRitualProgress();
+    if (!ritualAudio.paused) saveAudioState(true);
+});
+sanghyangAudio?.addEventListener("loadedmetadata", updateSanghyangProgress);
+sanghyangAudio?.addEventListener("timeupdate", updateSanghyangProgress);
+ritualSeek?.addEventListener("input", () => {
     if (!(ritualAudio instanceof HTMLAudioElement) || !Number.isFinite(ritualAudio.duration)) return;
-    ritualAudio.currentTime = (Number(audioSeek.value) / 100) * ritualAudio.duration;
+    ritualAudio.currentTime = (Number(ritualSeek.value) / 100) * ritualAudio.duration;
+});
+sanghyangSeek?.addEventListener("input", () => {
+    if (!(sanghyangAudio instanceof HTMLAudioElement) || !Number.isFinite(sanghyangAudio.duration)) return;
+    sanghyangAudio.currentTime = (Number(sanghyangSeek.value) / 100) * sanghyangAudio.duration;
 });
 
 const navLinks = [...document.querySelectorAll(".nav-pill a")];
@@ -542,6 +636,47 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
    Komponen animasi kemunculan saat scroll buatan sendiri tanpa library UI siap pakai,
    memanfaatkan IntersectionObserver API dengan performa 60fps & fallback aman.
    ========================================================================== */
+function initCostumeGallery() {
+    const viewer = document.querySelector("#costume-viewer");
+    const opener = document.querySelector("[data-costume-open]");
+    if (viewer && opener instanceof HTMLButtonElement) {
+        opener.addEventListener("click", () => {
+            viewer.showModal();
+            if (customCursor && finePointer.matches && !reducedMotion.matches) {
+                viewer.append(customCursor);
+                customCursor.style.zIndex = "1002";
+            }
+        });
+        viewer.querySelector("[data-costume-close]")?.addEventListener("click", () => viewer.close());
+        viewer.addEventListener("cancel", (event) => { event.preventDefault(); viewer.close(); });
+        viewer.addEventListener("close", () => {
+            if (customCursor && customCursorParent) customCursorParent.insertBefore(customCursor, customCursorNextSibling);
+        });
+        viewer.addEventListener("click", (event) => { if (event.target === viewer) viewer.close(); });
+    }
+    const gallery = document.querySelector("[data-costume-gallery]");
+    const detail = document.querySelector("[data-costume-detail], #costume-detail");
+    if (!gallery || !detail) return;
+
+    const content = {
+        mudra: ["Bahasa batin", "Jemari sebagai doa yang bergerak", "Mudra mengubah gestur menjadi tanda: tenang, waspada, dan terhubung dengan alam niskala. Tekukan jemari menjadi bahasa tanpa suara sebelum energi pertunjukan bergerak."],
+        gelungan: ["Struktur kepala", "Gelungan emas sebagai poros wibawa", "Gelungan menyusun siluet tokoh dari kulit kerbau, prada kencana, dan bunga kamboja. Tingginya menegaskan kedudukan sekaligus mengarahkan perhatian pada pusat spiritual kepala."],
+        poleng: ["Keseimbangan kosmis", "Poleng yang menjaga Rwa Bhineda", "Motif hitam-putih merangkum dua daya yang berlawanan namun saling melengkapi. Di dalam lingkaran Kecak, kain poleng menjadi penanda ritme, kebersamaan, dan keseimbangan."],
+    };
+    const title = detail.querySelector("[data-costume-title]");
+    const kicker = detail.querySelector("[data-costume-kicker]");
+    const copy = detail.querySelector("[data-costume-copy]");
+    const buttons = [...gallery.querySelectorAll("[data-costume-photo]")];
+    buttons.forEach((button) => button.addEventListener("click", () => {
+        const values = content[button.dataset.costumePhoto];
+        if (!values) return;
+        buttons.forEach((item) => { item.classList.toggle("is-active", item === button); item.setAttribute("aria-expanded", item === button ? "true" : "false"); });
+        [kicker.textContent, title.textContent, copy.textContent] = values;
+        detail.classList.add("is-visible");
+    }));
+    detail.querySelector("[data-costume-close]")?.addEventListener("click", () => detail.classList.remove("is-visible"));
+}
+
 function initScrollReveal() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         return;
@@ -618,8 +753,128 @@ function initScrollReveal() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initScrollReveal);
+    document.addEventListener("DOMContentLoaded", () => { initCostumeGallery(); initScrollReveal(); });
 } else {
+    initCostumeGallery();
     initScrollReveal();
 }
 
+(() => {
+    const MAP_SPOTS = [
+        { id: "amphitheater", zone: "ZONA PEMENTASAN", title: "Kecak Amphitheater", description: "Tribun melingkar untuk menikmati Tari Kecak saat matahari terbenam.", details: "Pintu dibuka pukul 17:00 WITA. Pertunjukan dimulai pukul 18:00 WITA.", rules: ["Datang lebih awal", "Jaga ketenangan selama pertunjukan"], x: 68, y: 54 },
+        { id: "sacred", zone: "ZONA SAKRAL", title: "Pura Luhur & Candi Bentar", description: "Kawasan suci yang menjadi pusat penghormatan dan persembahyangan.", details: "Kenakan pakaian sopan dan ikuti arahan petugas adat.", rules: ["Gunakan kain dan selendang", "Hormati area persembahyangan"], x: 30, y: 31 },
+        { id: "trail", zone: "JALUR PANORAMA", title: "Jalur Titian Panorama", description: "Jalur tebing dengan panorama Samudra Hindia.", details: "Panjang jalur sekitar 1,2 km. Waspadai tepian tebing.", rules: ["Tetap di jalur resmi", "Jangan melewati pembatas"], x: 48, y: 76 },
+    ];
+
+    const FAQ_ITEMS = [
+        { question: "Kapan Tari Kecak dipentaskan?", answer: "Pementasan berlangsung setiap hari pukul 18:00–19:00 WITA. Datang sebelum pintu dibuka pukul 17:00 WITA." },
+        { question: "Apa yang harus dikenakan saat memasuki pura?", answer: "Kenakan pakaian sopan, kain, dan selendang. Petugas dapat membantu pengunjung yang belum memiliki perlengkapan adat." },
+        { question: "Apakah tiket dapat dipesan secara online?", answer: "Ya. Gunakan tombol reservasi resmi pada halaman ini untuk memilih tanggal dan jumlah tiket." },
+        { question: "Apakah kawasan ramah untuk anak-anak?", answer: "Kawasan terbuka untuk keluarga, namun tetap awasi anak-anak karena beberapa jalur berada di dekat tebing." },
+    ];
+
+    class SoundscapeEngine {
+        constructor() { this.context = null; this.source = null; this.gain = null; }
+        start() {
+            if (!this.context) {
+                this.context = new (window.AudioContext || window.webkitAudioContext)();
+                this.gain = this.context.createGain();
+                this.gain.gain.value = 0.035;
+                this.gain.connect(this.context.destination);
+                const buffer = this.context.createBuffer(1, this.context.sampleRate * 2, this.context.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let index = 0; index < data.length; index += 1) data[index] = (Math.random() * 2 - 1) * 0.18;
+                this.source = this.context.createBufferSource();
+                this.source.buffer = buffer;
+                this.source.loop = true;
+                this.source.connect(this.gain);
+                this.source.start();
+            }
+            return this.context.resume();
+        }
+        stop() { return this.context?.suspend(); }
+    }
+
+    const mapContainer = document.querySelector("#mapPinsContainer");
+    const mapPopup = document.querySelector("#mapSpotPopup");
+    const faqContainer = document.querySelector("#faqContainer");
+    const bookingModal = document.querySelector("#bookingModal");
+    const bookingForm = document.querySelector("#bookingForm");
+    const soundscapeButton = document.querySelector("[data-soundscape-toggle]");
+    const soundscape = new SoundscapeEngine();
+
+    const setMapSpot = (spot) => {
+        if (!spot) return;
+        document.querySelector("#popupZone")?.replaceChildren(document.createTextNode(spot.zone));
+        document.querySelector("#popupTitle")?.replaceChildren(document.createTextNode(spot.title));
+        document.querySelector("#popupDesc")?.replaceChildren(document.createTextNode(spot.description));
+        document.querySelector("#popupDetails")?.replaceChildren(document.createTextNode(spot.details));
+        const rules = document.querySelector("#popupRulesBox");
+        if (rules) rules.replaceChildren(...spot.rules.map((rule) => { const item = document.createElement("div"); item.className = "component"; item.textContent = rule; return item; }));
+        mapPopup?.classList.remove("is-hidden");
+    };
+
+    if (mapContainer && mapPopup) {
+        MAP_SPOTS.forEach((spot) => {
+            const pin = document.createElement("button");
+            pin.type = "button";
+            pin.className = "position-absolute button";
+            pin.style.left = `${spot.x}%`;
+            pin.style.top = `${spot.y}%`;
+            pin.setAttribute("aria-label", spot.title);
+            pin.textContent = "•";
+            pin.addEventListener("click", () => setMapSpot(spot));
+            mapContainer.append(pin);
+        });
+        document.querySelector("#btnClosePopup")?.addEventListener("click", () => mapPopup.classList.add("is-hidden"));
+        mapPopup.addEventListener("click", (event) => { if (event.target === mapPopup) mapPopup.classList.add("is-hidden"); });
+        [["#mapTabAmphitheater", "amphitheater"], ["#mapTabSacred", "sacred"], ["#mapTabTrail", "trail"]].forEach(([selector, id]) => document.querySelector(selector)?.addEventListener("click", () => setMapSpot(MAP_SPOTS.find((spot) => spot.id === id))));
+    }
+
+    if (faqContainer) {
+        FAQ_ITEMS.forEach((item) => {
+            const details = document.createElement("details");
+            details.className = "card";
+            const summary = document.createElement("summary");
+            summary.className = "heading";
+            summary.textContent = item.question;
+            const answer = document.createElement("p");
+            answer.className = "copy";
+            answer.textContent = item.answer;
+            details.append(summary, answer);
+            faqContainer.append(details);
+        });
+    }
+
+    let lastBookingOpener = null;
+    const toggleBooking = (visible, opener = null) => {
+        if (!bookingModal) return;
+        bookingModal.classList.toggle("is-hidden", !visible);
+        bookingModal.setAttribute("aria-hidden", String(!visible));
+        document.body.classList.toggle("modal-open", visible);
+        if (visible) {
+            lastBookingOpener = opener || lastBookingOpener;
+            window.setTimeout(() => document.querySelector("#bookingDateInput")?.focus(), 0);
+        } else if (lastBookingOpener instanceof HTMLElement) {
+            lastBookingOpener.focus();
+        }
+    };
+    ["#btnHeroBooking", "#btnSectionBooking"].forEach((selector) => document.querySelector(selector)?.addEventListener("click", (event) => toggleBooking(true, event.currentTarget)));
+    document.querySelector("#btnCloseBookingModal")?.addEventListener("click", () => toggleBooking(false));
+    bookingModal?.addEventListener("click", (event) => { if (event.target === bookingModal) toggleBooking(false); });
+    document.querySelector("#btnNewBooking")?.addEventListener("click", () => { bookingForm?.classList.remove("is-hidden"); document.querySelector("#ticketPassView")?.classList.add("is-hidden"); });
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (bookingModal && !bookingModal.classList.contains("is-hidden")) toggleBooking(false);
+        if (mapPopup && !mapPopup.classList.contains("is-hidden")) mapPopup.classList.add("is-hidden");
+    });
+
+    if (bookingForm) {
+        const counts = { adult: 2, kecak: 2 };
+        const updateTotal = () => { const total = counts.adult * 30000 + counts.kecak * 150000; document.querySelector("#bookingGrandTotal").textContent = `Rp ${total.toLocaleString("id-ID")}`; };
+        [["#btnMinusAdult", "adult", -1], ["#btnPlusAdult", "adult", 1], ["#btnMinusKecak", "kecak", -1], ["#btnPlusKecak", "kecak", 1]].forEach(([selector, key, change]) => document.querySelector(selector)?.addEventListener("click", () => { counts[key] = Math.max(0, counts[key] + change); document.querySelector(`#count${key[0].toUpperCase()}${key.slice(1)}`).textContent = counts[key]; updateTotal(); }));
+        bookingForm.addEventListener("submit", (event) => { event.preventDefault(); document.querySelector("#passCustName").textContent = document.querySelector("#custName").value; document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent; document.querySelector("#passBookingCode").textContent = `ULU-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; bookingForm.classList.add("is-hidden"); document.querySelector("#ticketPassView")?.classList.remove("is-hidden"); });
+    }
+
+    soundscapeButton?.addEventListener("click", () => { const active = soundscapeButton.getAttribute("aria-pressed") === "true"; (active ? soundscape.stop() : soundscape.start()).catch?.(() => {}); soundscapeButton.setAttribute("aria-pressed", String(!active)); });
+})();
