@@ -1,332 +1,756 @@
 <!doctype html>
-<html lang="id" class="panduan-page">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kecak Bali — Panduan & E-Tiket Sakral Pura Uluwatu</title>
-    <meta name="description" content="Panduan terpadu peziarah spiritual dan wisatawan dunia, reservasi e-tiket resmi tari kecak sunset, tata tertib sakral, dan kartografi tebing Sad Kahyangan Pura Luhur Uluwatu.">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#140f0d">
+    <meta name="description"
+        content="Panduan resmi pengunjung, tiket masuk, jadwal sunset pementasan Tari Kecak, dan tata tertib sakral Sad Kahyangan Pura Luhur Uluwatu.">
+    <title>Panduan Kunjungan &amp; E-Tiket — Kecak Bali</title>
+    <script>document.documentElement.classList.add("has-page-loader");</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/panduan.css">
+    <script src="JS/script.js" defer></script>
 </head>
 
 <body class="panduan-page">
 
-    <!-- Top Navigation Bar -->
-    <header class="site-header">
-        <div class="header-inner">
-            <!-- Brand -->
-            <a href="#" class="link">
-                <div class="card">
-                    KB
-                </div>
-                <div class="cluster">
-                    <span class="label">
-                        KECAK BALI
-                    </span>
-                    <span class="label">
-                        ARSIP BUDAYA ULUWATU
-                    </span>
-                </div>
-            </a>
-
-            <!-- Center Nav -->
-            <nav class="nav-pill is-hidden">
-                <a href="#topografi" class="link">KOSMOLOGI</a>
-                <button id="navBtnEtiquette" class="button">FILOSOFI</button>
-                <button id="navBtnCharacters" class="button">
-                    EPIK RAMAYANA
-                    <svg class="component" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="component">
-                    <button class="button">
-                        PANDUAN
-                        <svg class="component" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    <div class="component is-hidden">
-                        <a href="#tiket" class="link">
-                            <span>Tarif & E-Tiket</span>
-                            <span class="label">Resmi</span>
-                        </a>
-                        <a href="#rundown" class="link">Jadwal
-                            & Rundown</a>
-                        <a href="#etika" class="link">Etika
-                            & Pantangan Adat</a>
-                        <a href="#faq" class="link">FAQ
-                            Wisatawan</a>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Right Action Zone -->
-            <div class="cluster">
-                <button id="btnAudioLive" class="button" data-soundscape-toggle aria-pressed="false">
-                    <svg class="component" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
-                    </svg>
-                    <span id="audioLiveText">RITUAL AUDIO</span>
-                </button>
-
-                <button id="btnHeaderCharacters" class="button is-hidden">
-                    <span>JELAJAHI TOKOH</span>
-                </button>
-
-                <button id="btnMobileMenu" class="button">
-                    <svg class="component" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
+    <div class="page-loader" role="status" aria-live="polite" aria-label="Memuat panduan kunjungan Kecak Bali">
+        <div class="page-loader-content" aria-hidden="true">
+            <span class="brand-mark"><img src="assets/pictures/heritage-mark.png" alt=""></span>
+            <span class="page-loader-brand">Kecak Bali</span>
+            <span class="page-loader-caption">Panduan Kunjungan &amp; E-Tiket</span>
+            <span class="page-loader-track"><span></span></span>
         </div>
+    </div>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobileDrawer" class="mobile-drawer is-hidden">
-            <a href="#topografi" class="link">KOSMOLOGI</a>
-            <button id="mobileBtnEtiquette" class="button">FILOSOFI</button>
-            <button id="mobileBtnCharacters" class="button">EPIK RAMAYANA</button>
-            <a href="#tiket" class="link">TARIF & E-TIKET</a>
-            <button id="mobileBtnCharactersCta" class="button">JELAJAHI
-                TOKOH</button>
+
+    <div class="custom-cursor" aria-hidden="true">
+        <span class="custom-cursor-core"></span>
+    </div>
+
+
+    <header class="site-header">
+        <a class="brand" href="index.html#beranda" aria-label="Kecak Bali — kembali ke beranda">
+            <span class="brand-mark"><img src="assets/pictures/heritage-mark.png" alt=""></span>
+            <span class="brand-copy"><strong>KECAK BALI</strong><small>SANGHYANG HERITAGE</small></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false"
+            aria-controls="primary-nav">
+            <span></span><span></span>
+        </button>
+        <nav class="nav-pill" id="primary-nav" aria-label="Navigasi utama">
+            <a href="index.html#beranda">Kosmologi &amp; Tradisi</a>
+            <a href="Filosofi.html">Filosofi</a>
+            <a href="dramaturgi.html">Epik Ramayana</a>
+            <a class="is-active" href="panduan.html" aria-current="page">Panduan Kunjungan</a>
+        </nav>
+        <div class="header-actions">
+            <button class="audio-trigger" type="button" data-audio-toggle data-global-audio-toggle aria-pressed="false">
+                <span class="status-dot"></span><span class="audio-symbol" aria-hidden="true">♫</span>
+                <span data-audio-label>Audio ritual langsung</span>
+            </button>
+            <button class="button button-primary header-cta" type="button" id="btnHeaderBooking">Reservasi E-Tiket <span
+                    aria-hidden="true">↗</span></button>
         </div>
     </header>
 
     <main class="panduan-main">
-        <!-- Hero Section -->
-        <section class="section">
-            <div class="component">
-                <h1 class="hero-title">
-                    Informasi Pengunjung, Tiket Masuk &
-                    <span class="label">
-                        Tata Tertib Sakral Pura Uluwatu
-                    </span>
+
+        <section class="panduan-hero" id="beranda" aria-labelledby="hero-title" data-reveal="fade-up">
+            <div class="panduan-hero-atmosphere" aria-hidden="true">
+                <div class="panduan-hero-glow glow-1"></div>
+                <div class="panduan-hero-glow glow-2"></div>
+                <div class="panduan-sacred-orbit"></div>
+                <div class="panduan-ember-field">
+                    <span class="ember-particle p1"></span>
+                    <span class="ember-particle p2"></span>
+                    <span class="ember-particle p3"></span>
+                    <span class="ember-particle p4"></span>
+                    <span class="ember-particle p5"></span>
+                    <span class="ember-particle p6"></span>
+                    <span class="ember-particle p7"></span>
+                    <span class="ember-particle p8"></span>
+                </div>
+            </div>
+
+            <div class="panduan-hero-inner">
+                <h1 id="hero-title" class="panduan-hero-title">
+                    Informasi Pengunjung, Tiket &amp;<br>
+                    <em>Tata Tertib Sakral Uluwatu</em>
                 </h1>
-                <p class="copy">
-                    Panduan terpadu peziarah spiritual dan wisatawan dunia. Menyelaraskan kenyamanan akses tebing
-                    samudra setinggi 70 meter dengan kearifan adat luhur kawasan suci Sad Kahyangan Pura Luhur Uluwatu.
+
+                <p class="panduan-hero-intro">
+                    Panduan terpadu peziarah spiritual dan wisatawan dunia. Menyelaraskan kenyamanan akses tebing samudra
+                    setinggi 70 meter dengan keluhuran kearifan adat kawasan suci Sad Kahyangan Pura Luhur Uluwatu.
                 </p>
-            </div>
 
-            <div class="cluster">
-                <button id="btnHeroBooking" class="button">
-                    <span>RESERVASI E-TIKET RESMI</span>
-                </button>
-                <button id="btnHeroEtiquette" class="button">
-                    <span>ETIKA & PANTANGAN ADAT</span>
-                </button>
-            </div>
+                <div class="panduan-hero-actions">
+                    <button id="btnHeroBooking" class="button button-primary" type="button">
+                        <span>Reservasi E-Tiket Resmi</span>
+                        <span aria-hidden="true">↗</span>
+                    </button>
+                    <a id="btnHeroEtiquette" href="#etika" class="button button-quiet">
+                        <span>Etika &amp; Tata Tertib Sakral</span>
+                        <span aria-hidden="true">↓</span>
+                    </a>
+                </div>
 
-            <!-- 4 Quick Fact Cards -->
-            <div class="cards">
-                <div class="card">
-                    <span class="label">JAM
-                        BUKA PURA</span>
-                    <div class="component">07:00 – 19:00 WITA</div>
-                    <div class="component">Buka Setiap Hari (Tanpa Libur)</div>
+
+                <div class="panduan-facts-grid" data-reveal-stagger aria-label="Ringkasan operasional penting">
+                    <article class="panduan-fact-card">
+                        <div class="panduan-fact-icon" aria-hidden="true">◈</div>
+                        <span class="panduan-fact-tag">JAM BUKA PURA</span>
+                        <strong class="panduan-fact-value">07:00 – 19:00</strong>
+                        <span class="panduan-fact-unit">WITA</span>
+                        <p class="panduan-fact-desc">Buka setiap hari tanpa libur untuk ziarah dan eksplorasi tebing.</p>
+                    </article>
+
+                    <article class="panduan-fact-card">
+                        <div class="panduan-fact-icon" aria-hidden="true">◇</div>
+                        <span class="panduan-fact-tag">PINTU AMFITEATER</span>
+                        <strong class="panduan-fact-value">17:00</strong>
+                        <span class="panduan-fact-unit">WITA</span>
+                        <p class="panduan-fact-desc">Pintu tribun dibuka. Disarankan hadir lebih awal demi posisi sunset terbaik.</p>
+                    </article>
+
+                    <article class="panduan-fact-card">
+                        <div class="panduan-fact-icon" aria-hidden="true">◉</div>
+                        <span class="panduan-fact-tag">PENTAS TARI KECAK</span>
+                        <strong class="panduan-fact-value">18:00 – 19:00</strong>
+                        <span class="panduan-fact-unit">WITA</span>
+                        <p class="panduan-fact-desc">Pementasan 70 penyuara di pelataran tebing berlatar matahari terbenam.</p>
+                    </article>
+
+                    <article class="panduan-fact-card">
+                        <div class="panduan-fact-icon" aria-hidden="true">✦</div>
+                        <span class="panduan-fact-tag">PRESISI GEOGRAFIS</span>
+                        <strong class="panduan-fact-value">70 Meter</strong>
+                        <span class="panduan-fact-unit">TEBING SAMUDRA</span>
+                        <p class="panduan-fact-desc">Tebing Pecatu, Kuta Selatan, Kabupaten Badung, Pulau Bali.</p>
+                    </article>
                 </div>
-                <div class="card">
-                    <span class="label">PINTU
-                        AMFITEATER</span>
-                    <div class="component">17:00 WITA</div>
-                    <div class="component">Wajib Hadir Lebih Awal</div>
-                </div>
-                <div class="card">
-                    <span class="label">PENTAS
-                        TARI KECAK</span>
-                    <div class="component">18:00 – 19:00 WITA</div>
-                    <div class="component">Sunset Golden Hour Tebing</div>
-                </div>
-                <div class="card">
-                    <span class="label">LOKASI
-                        PRESISI</span>
-                    <div class="component">Tebing Pecatu</div>
-                    <div class="component">Kuta Selatan, Badung, Bali</div>
+
+                <div class="panduan-hero-meta">
+                    <span class="status-dot"></span>
+                    <strong>Pentas Senja 18:00 WITA</strong>
+                    <span class="meta-divider">•</span>
+                    <span>1.200 Kursi Terbatas</span>
+                    <span class="meta-divider">•</span>
+                    <span>E-Tiket QR Code Instan</span>
+                    <span class="meta-pill">Sad Kahyangan Jagat Bali</span>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Topografi Map -->
-        <section id="topografi" class="section">
-            <div class="component">
-                <span class="label">TOPOGRAFI
-                    KAWASAN TEBING</span>
-                <h2 class="heading">Orientasi Ruang Mandala Uluwatu</h2>
-            </div>
 
-            <div class="cluster">
-                <button id="mapTabAmphitheater" class="button">
-                    Kecak Amphitheater (1.200 Kursi)
-                </button>
-                <button id="mapTabSacred" class="button">
-                    Pura Luhur & Candi Bentar (Zona Sakral)
-                </button>
-                <button id="mapTabTrail" class="button">
-                    Jalur Titian Panorama (1,2 km)
-                </button>
+        <section class="transition-ribbon" aria-label="Pesan tentang tradisi Kecak" data-reveal="fade-up">
+            <div class="transition-ribbon-window">
+                <div class="transition-ribbon-track">
+                    <div class="transition-ribbon-group">
+                        <span>PURA LUHUR ULUWATU</span><i aria-hidden="true"></i>
+                        <span>70 PENYUARA SAKRAL</span><i aria-hidden="true"></i>
+                        <span>RESERVASI E-TIKET RESMI</span><i aria-hidden="true"></i>
+                        <span>MATAHARI TERBENAM SAMUDRA</span><i aria-hidden="true"></i>
+                        <span>HARMONI TRI HITA KARANA</span><i aria-hidden="true"></i>
+                        <span>AWIG-AWIG DESA ADAT PECATU</span><i aria-hidden="true"></i>
+                        <span>CAK-CAK-CAK</span><i aria-hidden="true"></i>
+                        <span>SAD KAHYANGAN BALI</span><i aria-hidden="true"></i>
+                    </div>
+                    <div class="transition-ribbon-group" aria-hidden="true">
+                        <span>PURA LUHUR ULUWATU</span><i></i>
+                        <span>70 PENYUARA SAKRAL</span><i></i>
+                        <span>RESERVASI E-TIKET RESMI</span><i></i>
+                        <span>MATAHARI TERBENAM SAMUDRA</span><i></i>
+                        <span>HARMONI TRI HITA KARANA</span><i></i>
+                        <span>AWIG-AWIG DESA ADAT PECATU</span><i></i>
+                        <span>CAK-CAK-CAK</span><i></i>
+                        <span>SAD KAHYANGAN BALI</span><i></i>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="component">
-                <div class="component">
-                    <img src="assets/images/uluwatu_aerial.jpg" alt="Peta Topografi Uluwatu" class="media"></img>
-                    <div id="mapPinsContainer"></div>
-                    <!-- Popover Detail -->
-                    <div id="mapSpotPopup" class="map-popup is-hidden">
-                        <div class="cluster">
-                            <div>
-                                <span id="popupZone" class="label"></span>
-                                <h4 id="popupTitle" class="heading"></h4>
-                            </div>
-                            <button id="btnClosePopup" class="button" type="button" aria-label="Tutup detail lokasi">✕</button>
+
+        <section id="topografi" class="panduan-section" aria-labelledby="topografi-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="topografi-title" class="panduan-section-heading">Orientasi Ruang Mandala Uluwatu</h2>
+                    <p class="panduan-section-intro">
+                        Pura Luhur Uluwatu bertakhta di atas tanjung karang setinggi 70 meter yang menjorok ke Samudra Hindia.
+                        Kenali pembagian zona sakral pemujaan, amfiteater pementasan seni, dan titian panorama demi kenyamanan ziarah Anda.
+                    </p>
+                </header>
+
+                <div class="panduan-map-tabs" role="tablist" aria-label="Pilihan Zona Topografi">
+                    <button id="mapTabAmphitheater" class="panduan-tab is-active" type="button" role="tab" aria-selected="true">
+                        <span class="tab-indicator"></span>
+                        <span class="tab-number">01</span>
+                        <span class="tab-label">Kecak Amphitheater (1.200 Kursi)</span>
+                    </button>
+                    <button id="mapTabSacred" class="panduan-tab" type="button" role="tab" aria-selected="false">
+                        <span class="tab-indicator"></span>
+                        <span class="tab-number">02</span>
+                        <span class="tab-label">Pura Luhur &amp; Candi Bentar (Zona Sakral)</span>
+                    </button>
+                    <button id="mapTabTrail" class="panduan-tab" type="button" role="tab" aria-selected="false">
+                        <span class="tab-indicator"></span>
+                        <span class="tab-number">03</span>
+                        <span class="tab-label">Jalur Titian Panorama (1,2 km)</span>
+                    </button>
+                </div>
+
+                <div class="panduan-map-stage">
+                    <div class="panduan-map-canvas">
+                        <img src="assets/pictures/uluwatu-cliff-map.jpg" alt="Peta Topografi Kawasan Pura Luhur Uluwatu" class="panduan-map-media">
+                        <div class="panduan-map-overlay" aria-hidden="true">
+                            <span class="panduan-map-gridlines"></span>
+                            <span class="panduan-map-compass">✦ S 8.8290° E 115.0847°</span>
                         </div>
-                        <p id="popupDesc" class="copy"></p>
-                        <p id="popupDetails" class="copy"></p>
-                        <div id="popupRulesBox" class="component">
+                        <div id="mapPinsContainer" class="panduan-map-pins" aria-label="Titik interaktif peta"></div>
+
+
+                        <div id="mapSpotPopup" class="panduan-map-popup is-hidden" role="dialog" aria-modal="false" aria-labelledby="popupTitle">
+                            <div class="panduan-popup-top">
+                                <div>
+                                    <span id="popupZone" class="panduan-popup-badge">ZONA PEMENTASAN</span>
+                                    <h4 id="popupTitle" class="panduan-popup-title">Kecak Amphitheater</h4>
+                                </div>
+                                <button id="btnClosePopup" class="panduan-popup-close" type="button" aria-label="Tutup detail lokasi">✕</button>
+                            </div>
+                            <p id="popupDesc" class="panduan-popup-desc">Tribun melingkar untuk menikmati Tari Kecak saat matahari terbenam.</p>
+                            <p id="popupDetails" class="panduan-popup-meta">Pintu dibuka pukul 17:00 WITA. Pertunjukan dimulai pukul 18:00 WITA.</p>
+                            <div id="popupRulesBox" class="panduan-popup-rules"></div>
+                        </div>
+                    </div>
+
+                    <div class="panduan-map-legend">
+                        <div class="panduan-legend-item">
+                            <span class="legend-dot dot-amphitheater"></span>
+                            <span>Zona Seni &amp; Amfiteater Terbuka</span>
+                        </div>
+                        <div class="panduan-legend-item">
+                            <span class="legend-dot dot-sacred"></span>
+                            <span>Mandala Sakral Pura Utama (Kain Adat Wajib)</span>
+                        </div>
+                        <div class="panduan-legend-item">
+                            <span class="legend-dot dot-trail"></span>
+                            <span>Titian Tebing Tebal &amp; Pengamatan Samudra</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section: Tiket -->
-        <section id="tiket" class="section">
-            <div class="cards">
-                <div class="card">
-                    <div>
-                        <span class="label">WAJIB
-                            SEMUA PENGUNJUNG</span>
-                        <h3 class="heading">Tiket Masuk Kawasan Suci
-                            Pura Uluwatu</h3>
-                        <p class="copy">Retribusi Pemerintah Daerah Badung & Desa Adat Pecatu.
+
+        <section id="rundown" class="panduan-section" aria-labelledby="rundown-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="rundown-title" class="panduan-section-heading">Jadwal &amp; Alur Kunjungan Harmonis</h2>
+                    <p class="panduan-section-intro">
+                        Rangkaian pementasan terpadu selaras dengan detik-detik matahari terbenam. Ikuti rekomendasi waktu
+                        berikut agar ziarah dan pengalaman menonton Anda berlangsung tenang tanpa terburu-buru.
+                    </p>
+                </header>
+
+                <div class="panduan-timeline-grid" data-reveal-stagger>
+                    <article class="panduan-timeline-card">
+                        <div class="panduan-timeline-badge">16:00 – 16:30 WITA</div>
+                        <span class="panduan-timeline-step">FASE 01</span>
+                        <h3 class="panduan-timeline-title">Kedatangan &amp; Penyambutan Adat</h3>
+                        <p class="panduan-timeline-copy">
+                            Tiba di gerbang Candi Bentar Uluwatu. Mengambil kain kamen dan selendang kuning (senteng) yang
+                            telah disucikan di loket masuk, lalu menyusuri jalan setapak hutan perindang kera.
                         </p>
-                        <div class="grid">
-                            <div class="component">
-                                <span class="label">DOMESTIK (WNI)</span>
-                                <span class="label">Rp 30.000</span>
-                                <div class="component">Anak: Rp 20.000</div>
-                            </div>
-                            <div class="component">
-                                <span class="label">FOREIGNER</span>
-                                <span class="label">Rp 50.000</span>
-                                <div class="component">Child: Rp 30.000</div>
-                            </div>
+                        <div class="panduan-timeline-tip">
+                            <span>Saran:</span> Amankan kacamata, topi, perhiasan, dan barang berkilau dari kera jinak.
                         </div>
-                    </div>
-                    <div class="component">Loket Buka: 07:00 – 18:30 WITA
-                    </div>
-                </div>
+                    </article>
 
-                <div class="card">
-                    <div>
-                        <span class="label">TIKET
-                            PEMENTASAN KHUSUS</span>
-                        <h3 class="heading">Tiket Tari Kecak & Api
-                            Sunset Uluwatu</h3>
-                        <p class="copy">Tempat duduk tribun amfiteater melingkar menghadap
-                            sunset.</p>
-                        <div class="grid">
-                            <div class="component">
-                                <span class="label">TARIF REGULER</span>
-                                <span class="label">Rp 150.000</span>
-                                <div class="component">Usia &gt; 2 tahun</div>
-                            </div>
-                            <div class="component">
-                                <span class="label">KAPASITAS</span>
-                                <span class="label">1.200 Kursi</span>
-                                <div class="component">Cepat habis saat senja</div>
-                            </div>
+                    <article class="panduan-timeline-card">
+                        <div class="panduan-timeline-badge">16:30 – 17:00 WITA</div>
+                        <span class="panduan-timeline-step">FASE 02</span>
+                        <h3 class="panduan-timeline-title">Eksplorasi Tebing Panorama</h3>
+                        <p class="panduan-timeline-copy">
+                            Menikmati embusan angin laut Samudra Hindia di sepanjang jalur titian tebing 1,2 km.
+                            Mengabadikan siluet pura yang menjulang anggun di atas batuan karang setinggi 70 meter.
+                        </p>
+                        <div class="panduan-timeline-tip">
+                            <span>Saran:</span> Gunakan alas kaki nyaman untuk kontur bebatuan karang kapur.
                         </div>
-                    </div>
-                    <div class="component">Waktu Pentas: 18:00 – 19:00 WITA
-                    </div>
-                </div>
-            </div>
+                    </article>
 
-            <div class="cluster">
-                <div>
-                    <h4 class="heading">Hindari Antrean: Sangat Disarankan Pemesanan Online
-                    </h4>
-                    <p class="copy">Tiket online resmi menjamin nomor alokasi tempat duduk tanpa antre
-                        berdesakan.</p>
+                    <article class="panduan-timeline-card">
+                        <div class="panduan-timeline-badge">17:00 – 17:45 WITA</div>
+                        <span class="panduan-timeline-step">FASE 03</span>
+                        <h3 class="panduan-timeline-title">Pintu Masuk Amfiteater Terbuka</h3>
+                        <p class="panduan-timeline-copy">
+                            Petugas adat membuka gerbang amfiteater melingkar. Wisatawan dengan e-tiket resmi dipersilakan
+                            menempati undakan tribun terbuka dengan sudut pandang matahari terbenam tanpa halangan.
+                        </p>
+                        <div class="panduan-timeline-tip">
+                            <span>Saran:</span> Datang pukul 17:00 WITA untuk mendapatkan posisi tengah tribun terbaik.
+                        </div>
+                    </article>
+
+                    <article class="panduan-timeline-card panduan-timeline-card-featured">
+                        <div class="panduan-timeline-badge">18:00 – 18:45 WITA</div>
+                        <span class="panduan-timeline-step">FASE 04 · KLIMAKS SENJA</span>
+                        <h3 class="panduan-timeline-title">Kidung Sakral &amp; Epik Ramayana</h3>
+                        <p class="panduan-timeline-copy">
+                            Tujuh puluh penyuara pria duduk melingkari obor sentral. Lantunan poliritmik perkusi vokal
+                            <em>cak-cak-cak</em> menggelegar mengiringi kisah Rama, Sita, Rahwana, dan gugurnya Jatayu saat langit berubah keemasan.
+                        </p>
+                        <div class="panduan-timeline-tip">
+                            <span>Saran:</span> Jaga ketenangan dan nikmati perpaduan alami deburan ombak dan harmonisasi suara.
+                        </div>
+                    </article>
+
+                    <article class="panduan-timeline-card">
+                        <div class="panduan-timeline-badge">18:45 – 19:00 WITA</div>
+                        <span class="panduan-timeline-step">FASE 05</span>
+                        <h3 class="panduan-timeline-title">Hanoman Obong &amp; Penutupan</h3>
+                        <p class="panduan-timeline-copy">
+                            Atraksi sakral kobaran api bara tempurung kelapa saat ksatria kera putih Hanoman menembus
+                            lingkaran api Alengka. Diakhiri dengan pemercikan tirtha suci dan doa pembersihan arena.
+                        </p>
+                        <div class="panduan-timeline-tip">
+                            <span>Saran:</span> Tetap duduk hingga pemangku adat menyelesaikan kidung puja penutup.
+                        </div>
+                    </article>
                 </div>
-                <button id="btnSectionBooking" class="button">
-                    E-TIKET LANGSUNG TERBIT
-                </button>
             </div>
         </section>
 
-        <!-- Section: FAQ -->
-        <section id="faq" class="section">
-            <h3 class="heading">Pertanyaan Umum Wisatawan (FAQ)</h3>
-            <div id="faqContainer" class="faq-list"></div>
+
+        <section id="etika" class="panduan-section panduan-section-sacred" aria-labelledby="etika-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="etika-title" class="panduan-section-heading">Tata Tertib &amp; Etika Kawasan Suci</h2>
+                    <p class="panduan-section-intro">
+                        Pura Luhur Uluwatu merupakan salah satu dari enam Pura Sad Kahyangan penjaga spiritual Pulau Dewata.
+                        Seluruh pengunjung dan peziarah diwajibkan menghormati tatanan adat luhur demi menjaga keharmonisan Tri Hita Karana.
+                    </p>
+                </header>
+
+                <div class="panduan-rules-grid" data-reveal-stagger>
+                    <article class="panduan-rule-card">
+                        <div class="panduan-rule-header">
+                            <span class="panduan-rule-num">01</span>
+                            <span class="panduan-rule-tag">BUSANA ADAT WAJIB</span>
+                        </div>
+                        <h3 class="panduan-rule-title">Kain Kamen &amp; Selendang Suci</h3>
+                        <p class="panduan-rule-copy">
+                            Wajib mengenakan pakaian sopan yang menutupi pundak. Pengunjung wajib mengikatkan kain kamen dan selendang kuning (senteng) di pinggang. Kain dan selendang telah disediakan gratis bagi pemegang tiket di gerbang masuk.
+                        </p>
+                        <div class="panduan-rule-highlight">
+                            <span>Wajib bagi semua pengunjung tanpa terkecuali</span>
+                        </div>
+                    </article>
+
+                    <article class="panduan-rule-card">
+                        <div class="panduan-rule-header">
+                            <span class="panduan-rule-num">02</span>
+                            <span class="panduan-rule-tag">ZONASI SAKRAL</span>
+                        </div>
+                        <h3 class="panduan-rule-title">Batas Kawasan Suci Persembahyangan</h3>
+                        <p class="panduan-rule-copy">
+                            Area Jeroan (pelataran utama pura) hanya dibuka untuk umat Hindu yang hendak melakukan persembahyangan sembah bakti. Wisatawan umum dilarang melintasi pembatas sakral atau menaiki pelinggih/candi bentar.
+                        </p>
+                        <div class="panduan-rule-highlight">
+                            <span>Hormati kesakralan mandala persembahyangan umat</span>
+                        </div>
+                    </article>
+
+                    <article class="panduan-rule-card">
+                        <div class="panduan-rule-header">
+                            <span class="panduan-rule-num">03</span>
+                            <span class="panduan-rule-tag">FAUNA HUTAN LINDUNG</span>
+                        </div>
+                        <h3 class="panduan-rule-title">Kewaspadaan Terhadap Kera Ekor Panjang</h3>
+                        <p class="panduan-rule-copy">
+                            Hutan alas Pura Uluwatu dihuni kawanan kera suci (Macaca fascicularis). Dilarang menyentuh, menggoda, atau menatap mata kera secara agresif. Simpan kacamata hitam, ponsel, topi, dan botol minum di dalam tas tertutup.
+                        </p>
+                        <div class="panduan-rule-highlight">
+                            <span>Jaga barang pribadi tetap tersimpan rapi</span>
+                        </div>
+                    </article>
+
+                    <article class="panduan-rule-card">
+                        <div class="panduan-rule-header">
+                            <span class="panduan-rule-num">04</span>
+                            <span class="panduan-rule-tag">KETENANGAN PEMENTASAN</span>
+                        </div>
+                        <h3 class="panduan-rule-title">Larangan Memasuki Arena Api</h3>
+                        <p class="panduan-rule-copy">
+                            Selama pementasan Tari Kecak berlangsung, penonton dilarang berdiri di depan tribun, melangkah ke tengah lingkaran para penari, atau mendekati kobaran bara api sakral demi keselamatan bersama.
+                        </p>
+                        <div class="panduan-rule-highlight">
+                            <span>Dilarang menyalakan lampu flash kamera ke arah penari</span>
+                        </div>
+                    </article>
+                </div>
+
+
+                <aside class="panduan-notice-banner" aria-label="Pemberitahuan Adat Bali">
+                    <div class="panduan-notice-mark" aria-hidden="true">🕉</div>
+                    <div class="panduan-notice-content">
+                        <h4>Pemberitahuan Dresta Adat: Keadaan Cuntaka &amp; Masa Berkabung</h4>
+                        <p>
+                            Berdasarkan awig-awig kesucian Pura Sad Kahyangan, wanita yang sedang dalam masa menstruasi (datang bulan),
+                            orang yang sedang dalam masa berduka (kematian keluarga/cuntaka), atau mereka yang memiliki luka berdarah terbuka,
+                            dimohon dengan kerendahan hati untuk tidak memasuki kawasan pura demi menjaga kemurnian spiritual mandala.
+                        </p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+
+        <section id="tiket" class="panduan-section" aria-labelledby="tiket-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="tiket-title" class="panduan-section-heading">Tarif Tiket Masuk &amp; Tari Kecak</h2>
+                    <p class="panduan-section-intro">
+                        Retribusi resmi terkelola transparan oleh Pemerintah Kabupaten Badung &amp; Desa Adat Pecatu
+                        untuk pelestarian pura cagar budaya, pemeliharaan tebing, serta kelangsungan hidup sanggar seniman lokal.
+                    </p>
+                </header>
+
+                <div class="panduan-pricing-grid" data-reveal-stagger>
+
+                    <article class="panduan-pricing-card">
+                        <div class="panduan-pricing-header">
+                            <h3 class="panduan-pricing-title">Tiket Retribusi Kawasan Suci Pura Uluwatu</h3>
+                            <p class="panduan-pricing-desc">
+                                Akses seluruh area kawasan tebing Sad Kahyangan, hutan kera lindung, jalur titian panorama 1,2 km, dan peminjaman kain kamen selendang adat.
+                            </p>
+                        </div>
+
+                        <div class="panduan-pricing-rates">
+                            <div class="rate-box">
+                                <span class="rate-category">WISATAWAN DOMESTIK (WNI)</span>
+                                <div class="rate-price">
+                                    <strong>Rp 30.000</strong>
+                                    <small>/ Dewasa</small>
+                                </div>
+                                <span class="rate-child">Anak-anak (3–10 tahun): Rp 20.000</span>
+                            </div>
+
+                            <div class="rate-box">
+                                <span class="rate-category">FOREIGN VISITOR (WNA)</span>
+                                <div class="rate-price">
+                                    <strong>Rp 50.000</strong>
+                                    <small>/ Adult</small>
+                                </div>
+                                <span class="rate-child">Child (3–10 years): Rp 30.000</span>
+                            </div>
+                        </div>
+
+                        <ul class="panduan-pricing-features">
+                            <li><span>✓</span> Peminjaman kain kamen &amp; selendang gratis</li>
+                            <li><span>✓</span> Asuransi perlindungan keselamatan kawasan</li>
+                            <li><span>✓</span> Akses jalur titian panorama tebing Samudra</li>
+                        </ul>
+
+                        <div class="panduan-pricing-footer">
+                            <span>Loket Fisik Dibuka: 07:00 – 18:30 WITA</span>
+                        </div>
+                    </article>
+
+
+                    <article class="panduan-pricing-card panduan-pricing-card-featured">
+                        <div class="panduan-featured-pill">SANGAT DIMINATI · CEPAT HABIS</div>
+                        <div class="panduan-pricing-header">
+                            <h3 class="panduan-pricing-title">Tiket Tari Kecak &amp; Api Sunset Uluwatu</h3>
+                            <p class="panduan-pricing-desc">
+                                Tempat duduk tribun amfiteater melingkar menghadap langsung ke arah matahari terbenam Samudra Hindia dengan pertunjukan 70 penyuara sakral.
+                            </p>
+                        </div>
+
+                        <div class="panduan-pricing-rates">
+                            <div class="rate-box rate-box-gold">
+                                <span class="rate-category">TARIF SEMUA PENGUNJUNG</span>
+                                <div class="rate-price rate-price-gold">
+                                    <strong>Rp 150.000</strong>
+                                    <small>/ Orang (Usia &gt; 2 Tahun)</small>
+                                </div>
+                                <span class="rate-child">Kapasitas Maksimal: 1.200 Kursi / Hari</span>
+                            </div>
+                        </div>
+
+                        <ul class="panduan-pricing-features">
+                            <li><span>✓</span> Tempat duduk bernomor di amfiteater sunset</li>
+                            <li><span>✓</span> Sinopsis naskah Ramayana lengkap (6 bahasa)</li>
+                            <li><span>✓</span> Jaminan kuota tanpa antre berdesakan di loket</li>
+                            <li><span>✓</span> Durasi 60 menit penuh drama, api &amp; kidung suara</li>
+                        </ul>
+
+                        <div class="panduan-pricing-action">
+                            <button id="btnSectionBooking" class="button button-primary w-full" type="button">
+                                <span>Pesan E-Tiket Resmi Sekarang</span>
+                                <span aria-hidden="true">↗</span>
+                            </button>
+                            <span class="action-note">E-Tiket terbit langsung dengan QR Code verifikasi resmi.</span>
+                        </div>
+                    </article>
+                </div>
+
+
+                <div class="panduan-booking-callout" data-reveal="fade-up">
+                    <div class="callout-decor" aria-hidden="true">✦</div>
+                    <div class="callout-body">
+                        <h4 class="callout-title">Sangat Disarankan Melakukan Pemesanan E-Tiket Secara Online</h4>
+                        <p class="callout-copy">
+                            Karena kapasitas tribun amfiteater dibatasi demi kenyamanan dan keselamatan, tiket pementasan Tari Kecak senja kerap habis terjual sebelum pukul 16:30 WITA di loket fisik. Pemesanan daring menjamin kuota tempat duduk Anda.
+                        </p>
+                    </div>
+                    <div class="callout-action">
+                        <button id="btnCalloutBooking" class="button button-primary" type="button">
+                            <span>Reservasi E-Tiket Online</span>
+                            <span aria-hidden="true">↗</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="faq" class="panduan-section" aria-labelledby="faq-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="faq-title" class="panduan-section-heading">Pertanyaan Umum Wisatawan (FAQ)</h2>
+                    <p class="panduan-section-intro">
+                        Jawaban atas pertanyaan yang paling sering diajukan peziarah dan wisatawan seputar kedatangan, tata cara penukaran tiket, fasilitas, dan cuaca di Pura Luhur Uluwatu.
+                    </p>
+                </header>
+
+                <div class="panduan-faq-layout">
+
+                    <div id="faqContainer" class="panduan-faq-list" aria-label="Daftar Pertanyaan Umum"></div>
+
+
+                    <aside class="panduan-help-card">
+                        <h3 class="help-card-title">Butuh Bantuan Rombongan atau Reservasi Khusus?</h3>
+                        <p class="help-card-copy">
+                            Untuk kunjungan delegasi kenegaraan, rombongan sekolah budaya, atau bantuan akses kursi roda bagi lansia, silakan menghubungi pos pengelola adat Uluwatu.
+                        </p>
+                        <ul class="help-card-contact">
+                            <li><strong>Pos Pengelola:</strong> Desa Adat Pecatu, Badung, Bali</li>
+                            <li><strong>Layanan Telepon:</strong> +62 361 701010</li>
+                            <li><strong>Waktu Operasional:</strong> 08:00 – 19:00 WITA</li>
+                        </ul>
+                        <div class="help-card-action">
+                            <a href="#topografi" class="button button-quiet w-full">Lihat Titik Lokasi Peta ↗</a>
+                        </div>
+                    </aside>
+                </div>
+            </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="component">
-            © 2025 Majelis Desa Adat Pecatu & Yayasan Pura Luhur Uluwatu. Hak cipta adat dilindungi.
+
+    <footer class="site-footer history-footer">
+        <div class="footer-inner">
+            <div class="footer-main">
+                <section class="footer-intro" aria-label="Tentang warisan Kecak">
+                    <div class="footer-branding">
+                        <div class="footer-brand">
+                            <a class="footer-mark" href="index.html#beranda" aria-label="Kecak Bali — ke beranda">
+                                <img src="assets/pictures/heritage-mark.png" alt="">
+                            </a>
+                            <h4>Kecak Bali</h4>
+                        </div>
+                        <blockquote>“Napas kehidupan Bali, tempat mitos dan nyala api<br class="footer-quote-break">
+                            berpadu di ujung cakrawala dunia.”</blockquote>
+                    </div>
+                    <p>Didedikasikan untuk pelestarian musik sakral, dramaturgi tari, dan warisan budaya Sad Kahyangan Pura Luhur Uluwatu.</p>
+                </section>
+
+                <section class="footer-column footer-calendar" aria-labelledby="footer-calendar-title">
+                    <h2 id="footer-calendar-title">Kalender Sakral Bali</h2>
+                    <dl>
+                        <div>
+                            <dt>Tahun Saka</dt>
+                            <dd>1946&nbsp; Caka</dd>
+                        </div>
+                        <div>
+                            <dt>Sasih Berjalan</dt>
+                            <dd>Sasih Kedasa</dd>
+                        </div>
+                        <div>
+                            <dt>Tradisi</dt>
+                            <dd class="footer-highlight">Sanghyang</dd>
+                        </div>
+                        <div>
+                            <dt>Warisan</dt>
+                            <dd>Bali · Indonesia</dd>
+                        </div>
+                    </dl>
+                </section>
+
+                <nav class="footer-column footer-library" aria-labelledby="footer-library-title">
+                    <h2 id="footer-library-title">Pustaka &amp; Navigasi</h2>
+                    <ul>
+                        <li><a href="index.html#beranda">Kosmologi &amp; Tradisi</a></li>
+                        <li><a href="Filosofi.html">Filosofi &amp; Sejarah Kecak</a></li>
+                        <li><a href="dramaturgi.html">Dramaturgi Epik Ramayana</a></li>
+                        <li><a href="panduan.html">Panduan &amp; E-Tiket Uluwatu</a></li>
+                        <li><a href="index.html#panca-babak">Panca Babak Pementasan</a></li>
+                        <li><a href="index.html#uluwatu">Tebing Sad Kahyangan</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> Majelis Desa Adat Pecatu &amp; Yayasan Pura Luhur Uluwatu. Hak cipta adat dilindungi.</p>
+                <div class="footer-utility">
+                    <span>8.8290° S, 115.0847° E</span>
+                    <a href="#etika">Tata Tertib Kawasan Suci</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <!-- MODAL RESERVASI E-TIKET -->
-    <div id="bookingModal" class="modal is-hidden">
-        <div class="component">
-            <div class="cluster">
-                <h3 id="bookingModalTitle" class="heading">Pemesanan E-Tiket Resmi</h3>
-                <button id="btnCloseBookingModal" class="button" type="button" aria-label="Tutup formulir reservasi">✕</button>
-            </div>
 
-            <form id="bookingForm" class="booking-form">
-                <div class="grid">
-                    <button type="button" id="btnVisitorDomestik" class="button">WNI
-                        (DOMESTIK)</button>
-                    <button type="button" id="btnVisitorForeigner" class="button">FOREIGNER</button>
+    <div id="bookingModal" class="panduan-modal is-hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="bookingModalTitle">
+        <div class="panduan-modal-window">
+            <header class="panduan-modal-header">
+                <div>
+                    <span class="panduan-modal-badge">RESERVASI RESMI ONLINE</span>
+                    <h3 id="bookingModalTitle" class="panduan-modal-title">Pemesanan E-Tiket Resmi Tari Kecak</h3>
                 </div>
-                <input type="date" id="bookingDateInput" required class="field"></input>
-                <div class="cluster">
-                    <span class="label">Tiket Kawasan Dewasa</span>
-                    <div class="cluster">
-                        <button type="button" id="btnMinusAdult" class="button">-</button>
-                        <span id="countAdult" class="label">2</span>
-                        <button type="button" id="btnPlusAdult" class="button">+</button>
+                <button id="btnCloseBookingModal" class="panduan-modal-close" type="button" aria-label="Tutup formulir reservasi">✕</button>
+            </header>
+
+
+            <form id="bookingForm" class="panduan-booking-form">
+                <div class="form-group">
+                    <label class="form-label">Kategori Kewarganegaraan Pengunjung</label>
+                    <div class="visitor-type-switch" role="group" aria-label="Pilih kategori wisatawan">
+                        <button type="button" id="btnVisitorDomestik" class="btn-visitor-type is-active">
+                            <span>WNI (DOMESTIK)</span>
+                            <small>Rp 30.000 / Kawasan</small>
+                        </button>
+                        <button type="button" id="btnVisitorForeigner" class="btn-visitor-type">
+                            <span>FOREIGN VISITOR</span>
+                            <small>Rp 50.000 / Sacred Area</small>
+                        </button>
                     </div>
                 </div>
-                <div class="cluster">
-                    <span class="label">Tiket Tari Kecak & Api</span>
-                    <div class="cluster">
-                        <button type="button" id="btnMinusKecak" class="button">-</button>
-                        <span id="countKecak" class="label">2</span>
-                        <button type="button" id="btnPlusKecak" class="button">+</button>
+
+                <div class="form-group">
+                    <label for="bookingDateInput" class="form-label">Tanggal Kunjungan &amp; Menonton Sunset</label>
+                    <input type="date" id="bookingDateInput" required class="panduan-field">
+                </div>
+
+                <div class="counter-rows">
+                    <div class="counter-row">
+                        <div class="counter-info">
+                            <strong>Tiket Retribusi Kawasan Dewasa</strong>
+                            <small>Retribusi Pemkab Badung &amp; Desa Adat</small>
+                        </div>
+                        <div class="counter-stepper">
+                            <button type="button" id="btnMinusAdult" class="btn-stepper" aria-label="Kurangi tiket dewasa">−</button>
+                            <span id="countAdult" class="counter-value">2</span>
+                            <button type="button" id="btnPlusAdult" class="btn-stepper" aria-label="Tambah tiket dewasa">+</button>
+                        </div>
+                    </div>
+
+                    <div class="counter-row">
+                        <div class="counter-info">
+                            <strong>Tiket Pementasan Tari Kecak &amp; Api</strong>
+                            <small>Tribun Amfiteater Sunset 18:00 WITA (Rp 150.000/tiket)</small>
+                        </div>
+                        <div class="counter-stepper">
+                            <button type="button" id="btnMinusKecak" class="btn-stepper" aria-label="Kurangi tiket kecak">−</button>
+                            <span id="countKecak" class="counter-value">2</span>
+                            <button type="button" id="btnPlusKecak" class="btn-stepper" aria-label="Tambah tiket kecak">+</button>
+                        </div>
                     </div>
                 </div>
-                <input type="text" id="custName" placeholder="Nama Lengkap Pemesan" required class="field"></input>
-                <div class="cluster">
-                    <span id="bookingGrandTotal" class="label">Rp 360.000</span>
-                    <button type="submit" class="button">Konfirmasi
-                        & Terbitkan</button>
+
+                <div class="form-group">
+                    <label for="custName" class="form-label">Nama Lengkap Pemesan Sesuai Identitas</label>
+                    <input type="text" id="custName" placeholder="Contoh: Gusti Aditya" required class="panduan-field">
+                </div>
+
+                <div class="booking-summary-bar">
+                    <div class="summary-total">
+                        <span>Total Pembayaran Retribusi:</span>
+                        <strong id="bookingGrandTotal">Rp 360.000</strong>
+                    </div>
+                    <button type="submit" class="button button-primary">
+                        <span>Konfirmasi &amp; Terbitkan E-Tiket</span>
+                        <span aria-hidden="true">↗</span>
+                    </button>
                 </div>
             </form>
 
-            <div id="ticketPassView" class="ticket-pass is-hidden">
-                <div class="component">
-                    <h4 class="heading">BOARDING PASS RESMI PURA</h4>
-                    <div id="passBookingCode" class="component">ULU-2025-XXXXXX
+
+            <div id="ticketPassView" class="panduan-ticket-pass is-hidden">
+                <div class="pass-card">
+                    <div class="pass-header">
+                        <div class="pass-brand">
+                            <img src="assets/pictures/heritage-mark.png" alt="" class="pass-mark">
+                            <div>
+                                <strong>BOARDING PASS RESMI PURA LUHUR ULUWATU</strong>
+                                <small>Kecak &amp; Fire Dance Sunset Experience</small>
+                            </div>
+                        </div>
+                        <span class="pass-status">E-TIKET TERVERIFIKASI</span>
                     </div>
-                    <div id="passCustName" class="component"></div>
-                    <div id="passTotalAmount" class="component"></div>
+
+                    <div class="pass-body">
+                        <div class="pass-field">
+                            <span class="pass-label">KODE RESERVASI RESMI</span>
+                            <strong id="passBookingCode" class="pass-code">ULU-2026-XXXXXX</strong>
+                        </div>
+                        <div class="pass-field">
+                            <span class="pass-label">NAMA PEMESAN</span>
+                            <strong id="passCustName" class="pass-cust-name">—</strong>
+                        </div>
+                        <div class="pass-field">
+                            <span class="pass-label">TOTAL RETRIBUSI TERBAYAR</span>
+                            <strong id="passTotalAmount" class="pass-total">—</strong>
+                        </div>
+                        <div class="pass-field">
+                            <span class="pass-label">PINTU MASUK &amp; WAKTU PENTAS</span>
+                            <strong class="pass-time">Tribun Amfiteater · 17:00 WITA (Mulai 18:00 WITA)</strong>
+                        </div>
+                    </div>
+
+                    <div class="pass-barcode-decor" aria-hidden="true">
+                        <div class="barcode-lines"></div>
+                        <span>TUNJUKKAN QR / KODE INI KEPADA PETUGAS ADAT DI GERBANG PURA</span>
+                    </div>
                 </div>
-                <button id="btnNewBooking" class="button">Pesan Lagi</button>
+
+                <div class="pass-actions">
+                    <button id="btnNewBooking" type="button" class="button button-quiet">
+                        <span>Buat Pesanan Baru</span>
+                    </button>
+                    <button type="button" class="button button-primary" onclick="window.print()">
+                        <span>Cetak / Simpan Pass PDF</span>
+                        <span aria-hidden="true">↓</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Pure Vanilla JS -->
-    <script src="script.js"></script>
+
+    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak"
+        src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
+    <audio id="sanghyang-audio" preload="metadata" data-track-name="Kidung Sanghyang Dedari"
+        src="assets/audio/sanghyang-dedari.mp3"></audio>
+
+    <p class="visually-hidden" id="interface-status" aria-live="polite"></p>
 </body>
 
 </html>

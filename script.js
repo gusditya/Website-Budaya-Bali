@@ -611,7 +611,7 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
         customCursor.classList.toggle(
             "is-hovering",
             event.target instanceof Element && Boolean(
-                event.target.closest("a, button, [role='button']"),
+                event.target.closest("a, button, [role='button'], input, summary, [role='tab'], .btn-visitor-type, .btn-stepper"),
             ),
         );
     });
@@ -631,11 +631,7 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
     });
 }
 
-/* ==========================================================================
-   Bespoke Scroll Reveal Engine Component
-   Komponen animasi kemunculan saat scroll buatan sendiri tanpa library UI siap pakai,
-   memanfaatkan IntersectionObserver API dengan performa 60fps & fallback aman.
-   ========================================================================== */
+
 function initCostumeGallery() {
     const viewer = document.querySelector("#costume-viewer");
     const opener = document.querySelector("[data-costume-open]");
@@ -681,11 +677,7 @@ function initScrollReveal() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         return;
     }
-
-    // Aktifkan styling animasi scroll pada dokumen
     document.documentElement.classList.add("has-scroll-reveal");
-
-    // Selektor elemen dan section yang otomatis diberi animasi kemunculan saat discroll
     const autoSelectors = [
         "main > section",
         "main > article",
@@ -738,7 +730,6 @@ function initScrollReveal() {
 
         targets.forEach((target) => {
             const rect = target.getBoundingClientRect();
-            // Jika elemen berada dalam viewport awal, munculkan dengan sedikit jeda halus
             if (rect.top < window.innerHeight && rect.bottom > 0) {
                 window.setTimeout(() => {
                     target.classList.add("is-revealed");
@@ -800,11 +791,12 @@ if (document.readyState === "loading") {
     const faqContainer = document.querySelector("#faqContainer");
     const bookingModal = document.querySelector("#bookingModal");
     const bookingForm = document.querySelector("#bookingForm");
-    const soundscapeButton = document.querySelector("[data-soundscape-toggle]");
+    const soundscapeButton = document.querySelector("[data-audio-toggle], [data-soundscape-toggle]");
     const soundscape = new SoundscapeEngine();
 
     const setMapSpot = (spot) => {
         if (!spot) return;
+        document.querySelectorAll(".panduan-tab").forEach((tab) => tab.setAttribute("aria-selected", String(tab.id.toLowerCase().includes(spot.id))));
         document.querySelector("#popupZone")?.replaceChildren(document.createTextNode(spot.zone));
         document.querySelector("#popupTitle")?.replaceChildren(document.createTextNode(spot.title));
         document.querySelector("#popupDesc")?.replaceChildren(document.createTextNode(spot.description));
@@ -847,6 +839,7 @@ if (document.readyState === "loading") {
     }
 
     let lastBookingOpener = null;
+    const getModalFocusable = () => bookingModal?.querySelectorAll("button, input, [href], [tabindex]:not([tabindex='-1'])") || [];
     const toggleBooking = (visible, opener = null) => {
         if (!bookingModal) return;
         bookingModal.classList.toggle("is-hidden", !visible);
@@ -859,19 +852,58 @@ if (document.readyState === "loading") {
             lastBookingOpener.focus();
         }
     };
-    ["#btnHeroBooking", "#btnSectionBooking"].forEach((selector) => document.querySelector(selector)?.addEventListener("click", (event) => toggleBooking(true, event.currentTarget)));
+    ["#btnHeroBooking", "#btnSectionBooking", "#btnHeaderBooking", "#btnCalloutBooking"].forEach((selector) => document.querySelector(selector)?.addEventListener("click", (event) => toggleBooking(true, event.currentTarget)));
     document.querySelector("#btnCloseBookingModal")?.addEventListener("click", () => toggleBooking(false));
     bookingModal?.addEventListener("click", (event) => { if (event.target === bookingModal) toggleBooking(false); });
     document.querySelector("#btnNewBooking")?.addEventListener("click", () => { bookingForm?.classList.remove("is-hidden"); document.querySelector("#ticketPassView")?.classList.add("is-hidden"); });
     document.addEventListener("keydown", (event) => {
+        if (bookingModal && !bookingModal.classList.contains("is-hidden") && event.key === "Tab") {
+            const focusable = [...getModalFocusable()];
+            if (focusable.length) {
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+            return;
+        }
         if (event.key !== "Escape") return;
         if (bookingModal && !bookingModal.classList.contains("is-hidden")) toggleBooking(false);
         if (mapPopup && !mapPopup.classList.contains("is-hidden")) mapPopup.classList.add("is-hidden");
     });
 
     if (bookingForm) {
+        let isForeigner = false;
+        const btnDomestik = document.querySelector("#btnVisitorDomestik");
+        const btnForeigner = document.querySelector("#btnVisitorForeigner");
         const counts = { adult: 2, kecak: 2 };
-        const updateTotal = () => { const total = counts.adult * 30000 + counts.kecak * 150000; document.querySelector("#bookingGrandTotal").textContent = `Rp ${total.toLocaleString("id-ID")}`; };
+        const updateTotal = () => {
+            const adultRate = isForeigner ? 50000 : 30000;
+            const total = counts.adult * adultRate + counts.kecak * 150000;
+            const grandTotalEl = document.querySelector("#bookingGrandTotal");
+            if (grandTotalEl) {
+                grandTotalEl.textContent = `Rp ${total.toLocaleString("id-ID")}`;
+                grandTotalEl.classList.remove("is-updated");
+                requestAnimationFrame(() => grandTotalEl.classList.add("is-updated"));
+            }
+        };
+        btnDomestik?.addEventListener("click", () => {
+            isForeigner = false;
+            btnDomestik.classList.add("is-active");
+            btnForeigner?.classList.remove("is-active");
+            updateTotal();
+        });
+        btnForeigner?.addEventListener("click", () => {
+            isForeigner = true;
+            btnForeigner.classList.add("is-active");
+            btnDomestik?.classList.remove("is-active");
+            updateTotal();
+        });
         [["#btnMinusAdult", "adult", -1], ["#btnPlusAdult", "adult", 1], ["#btnMinusKecak", "kecak", -1], ["#btnPlusKecak", "kecak", 1]].forEach(([selector, key, change]) => document.querySelector(selector)?.addEventListener("click", () => { counts[key] = Math.max(0, counts[key] + change); document.querySelector(`#count${key[0].toUpperCase()}${key.slice(1)}`).textContent = counts[key]; updateTotal(); }));
         bookingForm.addEventListener("submit", (event) => { event.preventDefault(); document.querySelector("#passCustName").textContent = document.querySelector("#custName").value; document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent; document.querySelector("#passBookingCode").textContent = `ULU-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; bookingForm.classList.add("is-hidden"); document.querySelector("#ticketPassView")?.classList.remove("is-hidden"); });
     }
