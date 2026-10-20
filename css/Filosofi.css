@@ -191,6 +191,11 @@ body::before {
 
 
 
+body.has-custom-cursor,
+body.has-custom-cursor * {
+    cursor: none !important;
+}
+
 body.cursor-ready .custom-cursor {
     opacity: 1;
 }

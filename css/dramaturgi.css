@@ -13,6 +13,7 @@
     --ember-light: #ffa87d;
     --serif: "Playfair Display", Georgia, serif;
     --sans: "Plus Jakarta Sans", Arial, sans-serif;
+    --numeric: "Plus Jakarta Sans", Arial, sans-serif;
     --content: 1280px;
     --ease: cubic-bezier(.2, .75, .25, 1);
 }
@@ -190,6 +191,11 @@ body::before {
 }
 
 
+
+body.has-custom-cursor,
+body.has-custom-cursor * {
+    cursor: none !important;
+}
 
 body.cursor-ready .custom-cursor {
     opacity: 1;
@@ -1494,11 +1500,19 @@ a:focus-visible {
 
 
 .dramaturgi-monograph-heading h2,
-.dramaturgi-cast-heading h3 {
+.dramaturgi-cast-heading h3,
+.dramaturgi-costume-heading h2,
+.dramaturgi-ramayana-heading h2,
+.dramaturgi-kawi-heading h2,
+.dramaturgi-access-heading h2 {
     margin: 0;
     color: var(--cream);
     font: 400 clamp(28px, 3vw, 38px)/1.15 var(--serif);
     letter-spacing: -.02em;
+    background: linear-gradient(105deg, var(--ember-light) 0%, var(--gold) 46%, var(--cream) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 
@@ -2868,8 +2882,9 @@ a:focus-visible {
     border: 1px solid var(--gold);
     border-radius: 50%;
     color: var(--gold);
-    font: 500 13px var(--sans);
-    letter-spacing: .08em;
+    font: 600 13px var(--numeric);
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: .06em;
     background: var(--ink);
 }
 
@@ -4503,7 +4518,8 @@ a:focus-visible {
     border-radius: 5px;
     background: rgba(224, 90, 43, .12);
     color: var(--ember-light);
-    font: 600 9px/1.4 var(--sans);
+    font: 600 9px/1.4 var(--numeric);
+    font-variant-numeric: tabular-nums lining-nums;
 }
 
 

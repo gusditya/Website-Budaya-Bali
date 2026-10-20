@@ -605,6 +605,8 @@ function moveCustomCursorToArchive(isOpen) {
 }
 
 if (customCursor && finePointer.matches && !reducedMotion.matches) {
+    document.body.classList.add("has-custom-cursor");
+
     document.addEventListener("pointermove", (event) => {
         customCursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
         document.body.classList.add("cursor-ready");
