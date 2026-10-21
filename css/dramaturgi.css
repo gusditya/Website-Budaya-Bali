@@ -5231,6 +5231,69 @@ a:focus-visible {
 
 
 
+.dramaturgi-page .dramaturgi-monograph-heading,
+.dramaturgi-page .dramaturgi-cast-heading,
+.dramaturgi-page .dramaturgi-costume-heading,
+.dramaturgi-page .dramaturgi-ramayana-heading,
+.dramaturgi-page .dramaturgi-kawi-heading,
+.dramaturgi-page .dramaturgi-access-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.dramaturgi-page .dramaturgi-monograph-heading > p,
+.dramaturgi-page .dramaturgi-cast-heading > p,
+.dramaturgi-page .dramaturgi-costume-heading > p,
+.dramaturgi-page .dramaturgi-ramayana-heading > p {
+    max-width: 680px;
+    margin: 0 auto;
+    justify-self: auto;
+}
+
+.dramaturgi-page .dramaturgi-kawi-source {
+    align-self: center;
+}
+
+.dramaturgi-page .dramaturgi-access-coordinates {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, auto));
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    align-self: center;
+    padding-bottom: 0;
+}
+
+.dramaturgi-page .dramaturgi-access-coordinates span {
+    justify-content: center;
+    min-width: 0;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(42, 31, 25, .92), rgba(28, 22, 19, .86));
+    text-align: center;
+}
+
+@media (max-width: 560px) {
+    .dramaturgi-page .dramaturgi-access-coordinates {
+        grid-template-columns: 1fr;
+        width: min(100%, 300px);
+    }
+}
+
+.dramaturgi-page .dramaturgi-access-heading h2,
+.dramaturgi-page .dramaturgi-kawi-heading h2,
+.dramaturgi-page .dramaturgi-costume-heading h2,
+.dramaturgi-page .dramaturgi-ramayana-heading h2,
+.dramaturgi-page .dramaturgi-monograph-heading h2,
+    .dramaturgi-page .dramaturgi-cast-heading h3 {
+    max-width: 820px;
+    text-align: center;
+}
+
+
 .dramaturgi-access-coordinates {
     display: grid;
     justify-items: start;
@@ -6519,7 +6582,7 @@ a:focus-visible {
     }
 
 
-    .nav-pill.is-active {
+    .nav-pill.is-open {
         display: flex !important;
     }
 
@@ -6544,6 +6607,30 @@ a:focus-visible {
 
 html {
     scroll-behavior: smooth;
+}
+
+:root {
+    --muted: #b7a79b;
+}
+
+body {
+    font-size: 15px;
+}
+
+@media (max-width: 959px) and (min-width: 768px) {
+    .dramaturgi-page .site-header .nav-pill {
+        display: none !important;
+    }
+
+    .dramaturgi-page .site-header .menu-toggle {
+        display: inline-flex !important;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .dramaturgi-page .custom-cursor {
+        display: none !important;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -10,7 +10,7 @@ if (pageLoader) {
         loaderFinished = true;
         window.clearTimeout(loaderFinishTimer);
 
-        const minimumDisplayTime = 1500;
+        const minimumDisplayTime = 450;
         const elapsed = performance.now() - loaderStartedAt;
         window.setTimeout(() => {
             pageLoader.classList.add("is-leaving");
@@ -42,18 +42,41 @@ menuButton?.addEventListener("click", () => {
 });
 
 navigation?.querySelectorAll("a").forEach((link) => {
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    const linkPage = link.getAttribute("href")?.split("#")[0] || "index.html";
+    if (linkPage === currentPage || (currentPage === "index.html" && link.getAttribute("href") === "#beranda")) {
+        link.classList.add("is-active");
+        link.setAttribute("aria-current", "page");
+    }
+
     link.addEventListener("click", () => {
         closeNavigation();
         navigation.querySelectorAll("a").forEach((item) => item.classList.toggle("is-active", item === link));
     });
 });
 
+document.addEventListener("click", (event) => {
+    if (!navigation?.classList.contains("is-open")) return;
+    if (!event.target.closest(".site-header")) closeNavigation();
+});
+
+window.matchMedia("(min-width: 960px)").addEventListener("change", closeNavigation);
+
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeNavigation();
 });
 
-const ribbonToggle = document.querySelector("[data-ribbon-toggle]");
 const transitionRibbon = document.querySelector(".transition-ribbon");
+const ribbonToggle = transitionRibbon ? document.createElement("button") : null;
+
+if (transitionRibbon && ribbonToggle) {
+    ribbonToggle.type = "button";
+    ribbonToggle.className = "ribbon-toggle";
+    ribbonToggle.setAttribute("aria-pressed", "false");
+    ribbonToggle.setAttribute("aria-label", "Jeda teks berjalan");
+    ribbonToggle.innerHTML = "<span aria-hidden=\"true\">Ⅱ</span><small>Jeda</small>";
+    transitionRibbon.append(ribbonToggle);
+}
 
 ribbonToggle?.addEventListener("click", () => {
     const paused = transitionRibbon?.classList.toggle("is-paused") ?? false;

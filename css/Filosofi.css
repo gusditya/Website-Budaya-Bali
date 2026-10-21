@@ -1505,7 +1505,52 @@ a:focus-visible {
 
 
 .filosofi-page .transition-ribbon {
+    position: relative;
     margin: 0;
+}
+
+.filosofi-page .ribbon-toggle {
+    position: absolute;
+    z-index: 2;
+    right: 18px;
+    bottom: 50%;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 7px 11px;
+    border: 1px solid rgba(229, 169, 82, .3);
+    border-radius: 999px;
+    background: rgba(20, 15, 13, .92);
+    color: var(--gold);
+    font: 600 10px/1 var(--sans);
+    transform: translateY(50%);
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.filosofi-page .ribbon-toggle:hover,
+.filosofi-page .ribbon-toggle:focus-visible {
+    border-color: var(--gold);
+    background: var(--panel-2);
+    transform: translateY(50%) scale(1.03);
+}
+
+.filosofi-page .ribbon-toggle small {
+    color: var(--sand);
+    font-size: 9px;
+}
+
+@media (max-width: 767px) {
+    .filosofi-page .ribbon-toggle {
+        right: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .filosofi-page .transition-ribbon-track {
+        animation: none !important;
+    }
 }
 
 
@@ -4723,7 +4768,7 @@ a:focus-visible {
     }
 
 
-    .nav-pill.is-active {
+    .nav-pill.is-open {
         display: flex !important;
     }
 

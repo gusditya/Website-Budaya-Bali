@@ -4349,7 +4349,7 @@ a:focus-visible {
     }
 
 
-    .nav-pill.is-active {
+    .nav-pill.is-open {
         display: flex !important;
     }
 
@@ -4407,6 +4407,30 @@ html {
     scroll-behavior: smooth;
 }
 
+:root {
+    --muted: #b7a79b;
+}
+
+body {
+    font-size: 15px;
+}
+
+@media (hover: none), (pointer: coarse) {
+    .custom-cursor {
+        display: none !important;
+    }
+}
+
+@media (max-width: 959px) and (min-width: 768px) {
+    .site-header .nav-pill {
+        display: none !important;
+    }
+
+    .site-header .menu-toggle {
+        display: inline-flex !important;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
 
 
@@ -4449,4 +4473,97 @@ html {
 .panduan-page .header-cta,
 .panduan-page .hero-cta {
     box-shadow: 0 10px 24px rgba(229, 169, 82, 0.14);
+}
+
+.ribbon-toggle {
+    position: absolute;
+    z-index: 2;
+    right: 18px;
+    bottom: 50%;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 7px 11px;
+    border: 1px solid rgba(229, 169, 82, .3);
+    border-radius: 999px;
+    background: rgba(20, 15, 13, .9);
+    color: var(--gold);
+    font: 600 10px/1 var(--sans);
+    transform: translateY(50%);
+    cursor: pointer;
+}
+
+.ribbon-toggle:hover,
+.ribbon-toggle:focus-visible {
+    border-color: var(--gold);
+    background: var(--panel-2);
+}
+
+.ribbon-toggle small {
+    color: var(--sand);
+    font-size: 9px;
+}
+
+@media (max-width: 767px) {
+    .ribbon-toggle {
+        right: 10px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .transition-ribbon-track {
+        animation: none !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .glossary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 560px) {
+    .glossary {
+        padding: 22px 16px;
+    }
+
+    .glossary h3 {
+        align-items: flex-start;
+        font-size: 17px;
+        line-height: 1.35;
+    }
+
+    .glossary-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .glossary-card {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        column-gap: 12px;
+        padding: 14px;
+    }
+
+    .glossary-card .round-icon {
+        grid-row: span 3;
+        width: 32px;
+        height: 32px;
+    }
+
+    .glossary-card h4 {
+        margin: 0 0 5px;
+    }
+
+    .glossary-card p {
+        margin-bottom: 8px;
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .glossary-card > small {
+        padding-top: 7px;
+        font-size: 8px;
+    }
 }
