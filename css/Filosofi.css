@@ -191,9 +191,11 @@ body::before {
 
 
 
-body.has-custom-cursor,
-body.has-custom-cursor * {
-    cursor: none !important;
+@media (hover: hover) and (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+        cursor: none !important;
+    }
 }
 
 body.cursor-ready .custom-cursor {
@@ -996,7 +998,22 @@ a:focus-visible {
 
 @media (max-width: 560px) {
 
-    body {
+.skip-link {
+    position: fixed;
+    z-index: 3000;
+    top: 12px;
+    left: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateY(-160%);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+body {
+
         font-size: 13px;
     }
 

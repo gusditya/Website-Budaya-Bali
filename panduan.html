@@ -7,6 +7,12 @@
     <meta name="theme-color" content="#140f0d">
     <meta name="description"
         content="Panduan resmi pengunjung, tiket masuk, jadwal sunset pementasan Tari Kecak, dan tata tertib sakral Sad Kahyangan Pura Luhur Uluwatu.">
+    <link rel="canonical" href="panduan.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Panduan Kunjungan &amp; E-Tiket — Kecak Bali">
+    <meta property="og:description" content="Panduan resmi pengunjung, tiket masuk, jadwal sunset pementasan Tari Kecak, dan tata tertib sakral Sad Kahyangan Pura Luhur Uluwatu.">
+    <meta property="og:image" content="assets/pictures/uluwatu-cliff-map.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title>Panduan Kunjungan &amp; E-Tiket — Kecak Bali</title>
     <script>document.documentElement.classList.add("has-page-loader");</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +25,7 @@
 </head>
 
 <body class="panduan-page">
+    <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
 
     <div class="page-loader" role="status" aria-live="polite" aria-label="Memuat panduan kunjungan Kecak Bali">
         <div class="page-loader-content" aria-hidden="true">
@@ -60,7 +67,7 @@
         </div>
     </header>
 
-    <main class="panduan-main">
+    <main id="main-content" class="panduan-main">
 
         <section class="panduan-hero" id="beranda" aria-labelledby="hero-title" data-reveal="fade-up">
             <div class="panduan-hero-atmosphere" aria-hidden="true">
@@ -187,17 +194,17 @@
                 </header>
 
                 <div class="panduan-map-tabs" role="tablist" aria-label="Pilihan Zona Topografi">
-                    <button id="mapTabAmphitheater" class="panduan-tab is-active" type="button" role="tab" aria-selected="true">
+                    <button id="mapTabAmphitheater" class="panduan-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="mapSpotPopup" tabindex="0">
                         <span class="tab-indicator"></span>
                         <span class="tab-number">01</span>
                         <span class="tab-label">Kecak Amphitheater (1.200 Kursi)</span>
                     </button>
-                    <button id="mapTabSacred" class="panduan-tab" type="button" role="tab" aria-selected="false">
+                    <button id="mapTabSacred" class="panduan-tab" type="button" role="tab" aria-selected="false" aria-controls="mapSpotPopup" tabindex="-1">
                         <span class="tab-indicator"></span>
                         <span class="tab-number">02</span>
                         <span class="tab-label">Pura Luhur &amp; Candi Bentar (Zona Sakral)</span>
                     </button>
-                    <button id="mapTabTrail" class="panduan-tab" type="button" role="tab" aria-selected="false">
+                    <button id="mapTabTrail" class="panduan-tab" type="button" role="tab" aria-selected="false" aria-controls="mapSpotPopup" tabindex="-1">
                         <span class="tab-indicator"></span>
                         <span class="tab-number">03</span>
                         <span class="tab-label">Jalur Titian Panorama (1,2 km)</span>
@@ -415,6 +422,22 @@
         </section>
 
 
+        <section id="informasi" class="panduan-section panduan-quick-info" aria-labelledby="informasi-title" data-reveal="fade-up">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <span class="panduan-eyebrow"><span class="status-dot"></span> INFORMASI SEBELUM BERANGKAT</span>
+                    <h2 id="informasi-title" class="panduan-section-heading">Kunjungan Tenang, Persiapan Jelas</h2>
+                    <p class="panduan-section-intro">Periksa detail dasar sebelum tiba. Jadwal dan tarif dapat berubah, jadi gunakan kanal resmi pengelola untuk konfirmasi terakhir.</p>
+                </header>
+                <div class="panduan-quick-info-grid">
+                    <article class="panduan-info-card"><span>LOKASI</span><strong>Pura Luhur Uluwatu</strong><p>Desa Pecatu, Kecamatan Kuta Selatan, Badung, Bali.</p></article>
+                    <article class="panduan-info-card"><span>WAKTU KAWASAN</span><strong>07:00–19:00 WITA</strong><p>Tiba lebih awal untuk pemeriksaan, parkir, dan berjalan menuju area pertunjukan.</p></article>
+                    <article class="panduan-info-card"><span>PERTUNJUKAN</span><strong>Mulai sekitar 18:00 WITA</strong><p>Waktu dapat menyesuaikan matahari terbenam, cuaca, dan keputusan pengelola.</p></article>
+                    <article class="panduan-info-card"><span>AKSESIBILITAS</span><strong>Rencanakan rute</strong><p>Medan tebing memiliki tangga dan jalur tidak rata. Hubungi pengelola untuk bantuan khusus.</p></article>
+                </div>
+            </div>
+        </section>
+
         <section id="tiket" class="panduan-section" aria-labelledby="tiket-title" data-reveal="fade-up">
             <div class="panduan-container">
                 <header class="panduan-section-header">
@@ -496,10 +519,10 @@
 
                         <div class="panduan-pricing-action">
                             <button id="btnSectionBooking" class="button button-primary w-full" type="button">
-                                <span>Pesan E-Tiket Resmi Sekarang</span>
+                                <span>Cek Ketersediaan Pertunjukan</span>
                                 <span aria-hidden="true">↗</span>
                             </button>
-                            <span class="action-note">E-Tiket terbit langsung dengan QR Code verifikasi resmi.</span>
+                            <span class="action-note">Konfirmasi akhir mengikuti ketersediaan dan kanal resmi pengelola.</span>
                         </div>
                     </article>
                 </div>
@@ -508,14 +531,14 @@
                 <div class="panduan-booking-callout" data-reveal="fade-up">
                     <div class="callout-decor" aria-hidden="true">✦</div>
                     <div class="callout-body">
-                        <h4 class="callout-title">Sangat Disarankan Melakukan Pemesanan E-Tiket Secara Online</h4>
+                        <h4 class="callout-title">Rencanakan Kunjungan Lebih Awal</h4>
                         <p class="callout-copy">
                             Karena kapasitas tribun amfiteater dibatasi demi kenyamanan dan keselamatan, tiket pementasan Tari Kecak senja kerap habis terjual sebelum pukul 16:30 WITA di loket fisik. Pemesanan daring menjamin kuota tempat duduk Anda.
                         </p>
                     </div>
                     <div class="callout-action">
                         <button id="btnCalloutBooking" class="button button-primary" type="button">
-                            <span>Reservasi E-Tiket Online</span>
+                            <span>Cek Ketersediaan Online</span>
                             <span aria-hidden="true">↗</span>
                         </button>
                     </div>
@@ -552,6 +575,20 @@
                             <a href="#topografi" class="button button-quiet w-full">Lihat Titik Lokasi Peta ↗</a>
                         </div>
                     </aside>
+                </div>
+            </div>
+        </section>
+
+        <section id="sumber" class="panduan-section panduan-sources" aria-labelledby="sumber-title">
+            <div class="panduan-container">
+                <header class="panduan-section-header">
+                    <h2 id="sumber-title" class="panduan-section-heading">Sumber &amp; Catatan Pengunjung</h2>
+                    <p class="panduan-section-intro">Informasi operasional perlu dikonfirmasi kembali kepada pengelola resmi sebelum perjalanan. Materi budaya pada situs ini bersifat pengantar dan bukan pengganti panduan adat.</p>
+                </header>
+                <div class="panduan-source-grid">
+                    <div><strong>Catatan data</strong><p>Tarif, jadwal, kapasitas, dan aturan dapat berubah karena upacara, cuaca, atau kebijakan kawasan.</p></div>
+                    <div><strong>Kredit media</strong><p>Foto, audio, dan ilustrasi harus digunakan sesuai izin pemilik hak dan atribusi masing-masing.</p></div>
+                    <div><strong>Rujukan lanjutan</strong><p>Gunakan informasi terbaru dari loket, pengelola Pura Luhur Uluwatu, dan Desa Adat Pecatu.</p></div>
                 </div>
             </div>
         </section>
@@ -625,16 +662,17 @@
         <div class="panduan-modal-window">
             <header class="panduan-modal-header">
                 <div>
-                    <span class="panduan-modal-badge">RESERVASI RESMI ONLINE</span>
-                    <h3 id="bookingModalTitle" class="panduan-modal-title">Pemesanan E-Tiket Resmi Tari Kecak</h3>
+                    <span class="panduan-modal-badge">PERMINTAAN KETERSEDIAAN</span>
+                    <h3 id="bookingModalTitle" class="panduan-modal-title">Cek Ketersediaan Tari Kecak</h3>
                 </div>
                 <button id="btnCloseBookingModal" class="panduan-modal-close" type="button" aria-label="Tutup formulir reservasi">✕</button>
             </header>
 
 
-            <form id="bookingForm" class="panduan-booking-form">
+            <form id="bookingForm" class="panduan-booking-form" novalidate>
+                <p class="form-notice" id="bookingNotice">Form ini membuat simulasi permintaan. Konfirmasi tiket dan pembayaran dilakukan melalui kanal resmi pengelola.</p>
                 <div class="form-group">
-                    <label class="form-label">Kategori Kewarganegaraan Pengunjung</label>
+                    <span class="form-label">Kategori Kewarganegaraan Pengunjung</span>
                     <div class="visitor-type-switch" role="group" aria-label="Pilih kategori wisatawan">
                         <button type="button" id="btnVisitorDomestik" class="btn-visitor-type is-active">
                             <span>WNI (DOMESTIK)</span>
@@ -649,7 +687,7 @@
 
                 <div class="form-group">
                     <label for="bookingDateInput" class="form-label">Tanggal Kunjungan &amp; Menonton Sunset</label>
-                    <input type="date" id="bookingDateInput" required class="panduan-field">
+                    <input type="date" id="bookingDateInput" name="visitDate" autocomplete="off" required class="panduan-field">
                 </div>
 
                 <div class="counter-rows">
@@ -680,7 +718,7 @@
 
                 <div class="form-group">
                     <label for="custName" class="form-label">Nama Lengkap Pemesan Sesuai Identitas</label>
-                    <input type="text" id="custName" placeholder="Contoh: Gusti Aditya" required class="panduan-field">
+                    <input type="text" id="custName" name="customerName" autocomplete="name" placeholder="Contoh: Gusti Aditya" required class="panduan-field">
                 </div>
 
                 <div class="booking-summary-bar">
@@ -689,7 +727,7 @@
                         <strong id="bookingGrandTotal">Rp 360.000</strong>
                     </div>
                     <button type="submit" class="button button-primary">
-                        <span>Konfirmasi &amp; Terbitkan E-Tiket</span>
+                        <span>Ajukan Permintaan Kunjungan</span>
                         <span aria-hidden="true">↗</span>
                     </button>
                 </div>

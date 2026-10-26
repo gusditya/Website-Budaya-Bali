@@ -191,9 +191,11 @@ body::before {
 
 
 
-body.has-custom-cursor,
-body.has-custom-cursor * {
-    cursor: none !important;
+@media (hover: hover) and (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+        cursor: none !important;
+    }
 }
 
 body.cursor-ready .custom-cursor {
@@ -807,8 +809,8 @@ a:focus-visible {
 .transition-ribbon {
     position: relative;
     z-index: 3;
-    margin: -20px 0;
-    padding: 20px 0 20px;
+    margin: 0;
+    padding: 18px 0;
     border-top: 1px solid rgba(212, 175, 55, .22);
     border-bottom: 1px solid rgba(212, 175, 55, .22);
     background: var(--ink);
@@ -833,16 +835,15 @@ a:focus-visible {
 
 
 .transition-ribbon-track {
-    animation: ribbon-scroll 48s linear infinite;
+    animation: ribbon-scroll 34s linear infinite;
     will-change: transform;
 }
 
 
 
 .transition-ribbon:hover .transition-ribbon-track,
-.transition-ribbon:focus-within .transition-ribbon-track,
-.transition-ribbon.is-paused .transition-ribbon-track {
-    animation-play-state: paused;
+.transition-ribbon:focus-within .transition-ribbon-track {
+    animation-play-state: running;
 }
 
 
@@ -936,7 +937,11 @@ a:focus-visible {
 .philosophy-story {
     position: relative;
     min-height: 500px;
+    overflow: hidden;
 }
+
+
+
 
 
 
@@ -3583,7 +3588,22 @@ a:focus-visible {
 
 @media (max-width: 560px) {
 
-    body {
+.skip-link {
+    position: fixed;
+    z-index: 3000;
+    top: 12px;
+    left: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateY(-160%);
+}
+
+.skip-link:focus { transform: translateY(0); }
+
+body {
+
         font-size: 13px;
     }
 

@@ -10,7 +10,7 @@ if (pageLoader) {
         loaderFinished = true;
         window.clearTimeout(loaderFinishTimer);
 
-        const minimumDisplayTime = 450;
+        const minimumDisplayTime = 120;
         const elapsed = performance.now() - loaderStartedAt;
         window.setTimeout(() => {
             pageLoader.classList.add("is-leaving");
@@ -20,7 +20,7 @@ if (pageLoader) {
     };
 
     window.addEventListener("load", finishPageLoader, { once: true });
-    loaderFinishTimer = window.setTimeout(finishPageLoader, 2200);
+    loaderFinishTimer = window.setTimeout(finishPageLoader, 900);
     if (document.readyState === "complete") finishPageLoader();
 }
 
@@ -64,26 +64,6 @@ window.matchMedia("(min-width: 960px)").addEventListener("change", closeNavigati
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeNavigation();
-});
-
-const transitionRibbon = document.querySelector(".transition-ribbon");
-const ribbonToggle = transitionRibbon ? document.createElement("button") : null;
-
-if (transitionRibbon && ribbonToggle) {
-    ribbonToggle.type = "button";
-    ribbonToggle.className = "ribbon-toggle";
-    ribbonToggle.setAttribute("aria-pressed", "false");
-    ribbonToggle.setAttribute("aria-label", "Jeda teks berjalan");
-    ribbonToggle.innerHTML = "<span aria-hidden=\"true\">Ⅱ</span><small>Jeda</small>";
-    transitionRibbon.append(ribbonToggle);
-}
-
-ribbonToggle?.addEventListener("click", () => {
-    const paused = transitionRibbon?.classList.toggle("is-paused") ?? false;
-    ribbonToggle.setAttribute("aria-pressed", String(paused));
-    ribbonToggle.setAttribute("aria-label", paused ? "Lanjutkan teks berjalan" : "Jeda teks berjalan");
-    const glyph = ribbonToggle.querySelector("span");
-    if (glyph) glyph.textContent = paused ? "▶" : "Ⅱ";
 });
 
 const acts = [
@@ -370,7 +350,9 @@ function toggleAudioPlayer(audio, button, name) {
     if (!(audio instanceof HTMLAudioElement)) return;
     if (audio.paused || audio.ended) {
         if (audio.ended) audio.currentTime = 0;
-        audio.play().catch(() => {});
+        audio.play().catch(() => {
+            document.querySelector("#interface-status")?.replaceChildren(document.createTextNode("Audio belum dapat diputar"));
+        });
     } else {
         audio.pause();
     }
@@ -930,7 +912,7 @@ if (document.readyState === "loading") {
             updateTotal();
         });
         [["#btnMinusAdult", "adult", -1], ["#btnPlusAdult", "adult", 1], ["#btnMinusKecak", "kecak", -1], ["#btnPlusKecak", "kecak", 1]].forEach(([selector, key, change]) => document.querySelector(selector)?.addEventListener("click", () => { counts[key] = Math.max(0, counts[key] + change); document.querySelector(`#count${key[0].toUpperCase()}${key.slice(1)}`).textContent = counts[key]; updateTotal(); }));
-        bookingForm.addEventListener("submit", (event) => { event.preventDefault(); document.querySelector("#passCustName").textContent = document.querySelector("#custName").value; document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent; document.querySelector("#passBookingCode").textContent = `ULU-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; bookingForm.classList.add("is-hidden"); document.querySelector("#ticketPassView")?.classList.remove("is-hidden"); });
+        bookingForm.addEventListener("submit", (event) => { event.preventDefault(); if (!bookingForm.reportValidity()) return; document.querySelector("#passCustName").textContent = document.querySelector("#custName").value; document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent; document.querySelector("#passBookingCode").textContent = `REQ-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; document.querySelector("#bookingNotice")?.replaceChildren(document.createTextNode("Permintaan tersimpan sebagai simulasi. Hubungi kanal resmi pengelola untuk konfirmasi tiket dan pembayaran.")); bookingForm.classList.add("is-hidden"); document.querySelector("#ticketPassView")?.classList.remove("is-hidden"); });
     }
 
     soundscapeButton?.addEventListener("click", () => { const active = soundscapeButton.getAttribute("aria-pressed") === "true"; (active ? soundscape.stop() : soundscape.start()).catch?.(() => {}); soundscapeButton.setAttribute("aria-pressed", String(!active)); });
