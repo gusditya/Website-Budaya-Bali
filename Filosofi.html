@@ -21,6 +21,7 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/Filosofi.css">
+    <link rel="stylesheet" href="css/improvements.css">
     <script src="JS/script.js" defer></script>
 </head>
 
@@ -606,8 +607,12 @@
         </section>
     </main>
 
-    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak"
-            src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
+    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak" src="assets/audio/tari-kecak-uluwatu.MP3"></audio>
+    <aside class="floating-audio" aria-label="Kontrol audio ritual">
+        <button class="audio-play" type="button" data-audio-toggle aria-label="Putar atau jeda audio ritual" aria-pressed="false"><span class="play-glyph" aria-hidden="true">▶</span></button>
+        <div class="floating-audio-copy"><span data-audio-label>Suara Kecak · Ritual senja</span><small>Simfoni vokal Uluwatu</small></div>
+        <div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </aside>
         <audio id="sanghyang-audio" preload="metadata" data-track-name="Kidung Sanghyang Dedari"
             src="assets/audio/sanghyang-dedari.mp3"></audio>
 

@@ -2373,7 +2373,8 @@ body {
     border-radius: 13px;
     background: linear-gradient(145deg, rgba(31, 24, 20, .94), rgba(23, 18, 15, .98));
     box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
-    transition: border-color .25s ease, transform .25s var(--ease), background .25s ease;
+    transition: border-color .25s ease, background .25s ease;
+    transform: none;
 }
 
 
@@ -2424,8 +2425,12 @@ body {
 
 
 
+.dramaturgi-costume-card {
+    cursor: pointer;
+}
+
 .dramaturgi-costume-card:hover {
-    transform: translateY(-4px);
+    transform: none;
     border-color: rgba(229, 169, 82, .42);
     background:
         radial-gradient(circle at 100% 0, rgba(224, 90, 43, .1), transparent 46%),
@@ -5880,8 +5885,12 @@ body {
 
 
 .history-archive-viewer {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
     width: min(980px, calc(100% - 32px));
     max-width: none;
+    margin: 0;
     max-height: min(88dvh, 900px);
     padding: 0;
     overflow: auto;
@@ -5890,6 +5899,10 @@ body {
     background: var(--ink-2);
     color: var(--cream);
     box-shadow: 0 28px 90px rgba(0, 0, 0, .6);
+}
+
+.history-archive-viewer[open] {
+    display: block;
 }
 
 
@@ -5950,9 +5963,28 @@ body {
 
 
 
-.history-archive-viewer-close:hover {
+.history-archive-viewer-close {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform .2s var(--ease), border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+.history-archive-viewer-close:hover,
+.history-archive-viewer-close:focus-visible {
     border-color: var(--gold);
-    color: var(--gold);
+    background: var(--gold);
+    color: var(--ink);
+    box-shadow: 0 0 0 4px rgba(229, 169, 82, .2), 0 8px 20px rgba(0, 0, 0, .28);
+    transform: scale(1.08);
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .history-archive-viewer-close:hover,
+    .history-archive-viewer-close:focus-visible {
+        transform: scale(1.04);
+    }
 }
 
 

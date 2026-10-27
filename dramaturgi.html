@@ -21,6 +21,8 @@
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/dramaturgi.css">
+    <link rel="stylesheet" href="css/improvements.css">
+    <link rel="stylesheet" href="css/dramaturgi-cursor-fix.css">
     <script src="JS/script.js" defer></script>
 </head>
 
@@ -696,7 +698,12 @@
             </div>
         </section>
     </main>
-    <audio id="ritual-audio" preload="none" src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
+    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak" src="assets/audio/tari-kecak-uluwatu.MP3"></audio>
+    <aside class="floating-audio" aria-label="Kontrol audio ritual">
+        <button class="audio-play" type="button" data-audio-toggle aria-label="Putar atau jeda audio ritual" aria-pressed="false"><span class="play-glyph" aria-hidden="true">▶</span></button>
+        <div class="floating-audio-copy"><span data-audio-label>Suara Kecak · Ritual senja</span><small>Simfoni vokal Uluwatu</small></div>
+        <div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </aside>
 
     <footer class="site-footer">
         <div class="footer-inner">

@@ -19,9 +19,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
-        rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap"></noscript>
+    <link rel="icon" type="image/png" href="assets/pictures/heritage-mark.png">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/improvements.css">
+    <style>
+        .hero-gallery img { content-visibility: auto; }
+        .section[data-reveal], .knowledge { content-visibility: auto; contain-intrinsic-size: 700px; }
+    </style>
     <script src="JS/script.js" defer></script>
 </head>
 
@@ -58,7 +65,7 @@
                 <span class="status-dot"></span><span class="audio-symbol" aria-hidden="true">♫</span>
                 <span data-audio-label>Audio ritual langsung</span>
             </button>
-            <a class="button button-primary header-cta" href="dramaturgi.html">Dramaturgi kosmik <span
+            <a class="button button-primary header-cta" href="panduan.html">Rencanakan kunjungan <span
                     aria-hidden="true">↗</span></a>
         </div>
     </header>
@@ -71,7 +78,7 @@
                 <p class="hero-intro">Tujuh puluh suara bersahut-sahutan dalam simfoni poliritmik tanpa instrumen
                     gamelan, menggema dari bibir tebing laut Pura Luhur Uluwatu.</p>
                 <div class="hero-actions">
-                    <a class="button button-primary" href="#filosofi">Eksplorasi kosmologi &amp; tradisi <span
+                    <a class="button button-primary" href="#filosofi">Mulai eksplorasi <span
                             aria-hidden="true">↗</span></a>
                     <button class="button button-quiet" type="button" data-audio-toggle aria-pressed="false">
                         <span class="audio-symbol" aria-hidden="true">♫</span>
@@ -83,7 +90,7 @@
                     <article class="gallery-card gallery-card-side">
                         <div class="gallery-photo">
                             <img src="assets/pictures/hero-dancer.png"
-                                alt="Penari Ramayana mengenakan gelungan dan bunga kamboja">
+                                alt="Penari Ramayana mengenakan gelungan dan bunga kamboja" fetchpriority="high" decoding="async">
                             <span class="image-tag">01 / Pemahat sakral</span>
                         </div>
                         <div class="gallery-caption"><strong>Gelungan &amp; kain prada</strong><span>Ekspresi karakter
@@ -149,7 +156,7 @@
                     <h2 class="section-title" id="philosophy-title">Filosofi<br><em>Trans Polifonik</em></h2>
                     <figure class="story-image">
                         <img src="assets/pictures/philosophy-circle.png"
-                            alt="Para penyuara Kecak membentuk lingkaran mengelilingi api">
+                            alt="Para penyuara Kecak membentuk lingkaran mengelilingi api" loading="lazy" decoding="async">
                         <figcaption>Trans Sanghyang · Uluwatu 1931</figcaption>
                         <span class="image-corner" aria-hidden="true">↗</span>
                     </figure>
@@ -216,7 +223,7 @@
                         <p>Bunga kamboja segar diperciki Tirtha suci sebelum dikenakan busana sakral.</p>
                     </aside>
                     <img src="assets/pictures/hanuman-portrait.png"
-                        alt="Penari Ramayana mengenakan topeng dan mahkota emas sebagai Rahwana">
+                        alt="Penari Ramayana mengenakan topeng dan mahkota emas sebagai Rahwana" loading="lazy" decoding="async">
                     <figcaption class="portrait-caption"><span class="micro-label">Gelungan &amp; kain
                             prada</span><strong>Topeng sakral Raja Dasamuka Rahwana</strong></figcaption>
                 </figure>
@@ -329,9 +336,13 @@
                 </div>
                 <article class="map-card panel">
                     <div class="map-visual">
-                        <iframe src="https://maps.google.com/maps?q=-8.8290%2C115.0847&amp;z=16&amp;output=embed"
-                            title="Peta Google Maps Pura Luhur Uluwatu, Bali" loading="lazy"
-                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe
+                            src="https://maps.google.com/maps?q=-8.8290%2C115.0847&amp;z=16&amp;output=embed"
+                            title="Peta Google Maps Pura Luhur Uluwatu, Bali"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allow="fullscreen"
+                            allowfullscreen></iframe>
                         <span class="map-coordinates">8.8290° S, 115.0847° E</span>
                     </div>
                     <div class="map-caption">
@@ -529,14 +540,13 @@
         </section>
     </main>
 
-    <audio id="ritual-audio" preload="none" src="assets/audio/tari-kecak-uluwatu.mp3"></audio>
+    <audio id="ritual-audio" preload="metadata" data-track-name="Tari Kecak" src="assets/audio/tari-kecak-uluwatu.MP3"></audio>
     <aside class="floating-audio" aria-label="Kontrol audio ritual">
         <button class="audio-play" type="button" data-audio-toggle aria-label="Putar atau jeda audio ritual"
             aria-pressed="false"><span class="play-glyph" aria-hidden="true">▶</span></button>
         <div class="floating-audio-copy"><span data-audio-label>Suara Kecak · Ritual senja</span><small>Simfoni vokal
                 Uluwatu</small></div>
         <div class="waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-        <button class="audio-more" type="button" aria-label="Informasi audio">···</button>
     </aside>
 
     <footer class="site-footer">

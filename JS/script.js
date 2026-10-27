@@ -250,7 +250,9 @@ const audioPlayGlyph = document.querySelector(".floating-audio .play-glyph");
 const audioPlayButton = document.querySelector(".floating-audio .audio-play");
 const sanghyangPlayer = document.querySelector(".sanghyang-player");
 const audioTrackName = ritualAudio?.dataset.trackName || "Tari Kecak";
-const audioTrackKey = ritualAudio?.currentSrc || ritualAudio?.getAttribute("src") || audioTrackName;
+const audioTrackKey = (ritualAudio?.getAttribute("src") || audioTrackName)
+    .replace(/\\/g, "/")
+    .replace(/\.mp3$/i, ".MP3");
 const audioStateKey = "kecak-audio-state";
 const sanghyangSeek = sanghyangPlayer?.querySelector(".sanghyang-audio-seek") || null;
 const sanghyangCurrentTime = sanghyangPlayer?.querySelector("[data-audio-current-time]") || null;
@@ -272,16 +274,22 @@ function saveAudioState(isPlaying) {
 
 function restoreAudioState() {
     if (!(ritualAudio instanceof HTMLAudioElement)) return;
-    try {
-        const state = JSON.parse(sessionStorage.getItem(audioStateKey) || "null");
-        if (state?.track !== audioTrackKey || !Number.isFinite(state.time) || state.time <= 0) return;
-        ritualAudio.addEventListener("loadedmetadata", () => {
+
+    const applyState = () => {
+        try {
+            const state = JSON.parse(sessionStorage.getItem(audioStateKey) || "null");
+            if (state?.track !== audioTrackKey || !Number.isFinite(state.time) || state.time <= 0) return;
+            if (!Number.isFinite(ritualAudio.duration) || ritualAudio.duration <= 0) return;
+
             ritualAudio.currentTime = Math.min(state.time, Math.max(0, ritualAudio.duration - .1));
             updateAudioProgress();
-        }, { once: true });
-    } catch {
-        sessionStorage.removeItem(audioStateKey);
-    }
+        } catch {
+            sessionStorage.removeItem(audioStateKey);
+        }
+    };
+
+    if (ritualAudio.readyState >= HTMLMediaElement.HAVE_METADATA) applyState();
+    else ritualAudio.addEventListener("loadedmetadata", applyState, { once: true });
 }
 function formatAudioTime(time) {
     if (!Number.isFinite(time) || time < 0) return "--:--";
@@ -330,6 +338,10 @@ audioLabels.forEach((label) => {
 });
 
 function updateAudioControls(isPlaying) {
+    document.querySelectorAll(".floating-audio").forEach((bar) => {
+        bar.classList.toggle("is-playing", isPlaying);
+        bar.setAttribute("aria-hidden", String(!isPlaying));
+    });
     audioButtons.forEach((button) => button.setAttribute("aria-pressed", String(isPlaying)));
     audioBar?.classList.toggle("is-playing", isPlaying);
     sanghyangPlayer?.classList.remove("is-playing");
@@ -379,6 +391,8 @@ sanghyangAudio?.addEventListener("play", () => {
 sanghyangAudio?.addEventListener("pause", () => sanghyangPlayer?.classList.remove("is-playing"));
 sanghyangAudio?.addEventListener("ended", () => sanghyangPlayer?.classList.remove("is-playing"));
 
+updateAudioControls(ritualAudio instanceof HTMLAudioElement && !ritualAudio.paused && !ritualAudio.ended);
+
 audioButtons.forEach((button) => {
     button.addEventListener("click", () => {
         if (!(ritualAudio instanceof HTMLAudioElement)) {
@@ -387,8 +401,12 @@ audioButtons.forEach((button) => {
         }
 
         if (ritualAudio.paused || ritualAudio.ended) {
+            document.querySelectorAll(".floating-audio").forEach((bar) => bar.classList.add("is-playing"));
             if (sanghyangAudio && !sanghyangAudio.paused) sanghyangAudio.pause();
-            if (ritualAudio.ended) ritualAudio.currentTime = 0;
+            if (ritualAudio.ended) {
+                ritualAudio.currentTime = 0;
+                sessionStorage.removeItem(audioStateKey);
+            }
             ritualAudio.play().catch((error) => {
                 if (interfaceStatus) {
                     interfaceStatus.textContent = error.name === "NotAllowedError"
@@ -405,18 +423,22 @@ audioButtons.forEach((button) => {
 restoreAudioState();
 
 ritualAudio?.addEventListener("playing", () => {
+    document.querySelectorAll(".floating-audio").forEach((bar) => bar.classList.add("is-playing"));
     saveAudioState(true);
     updateAudioControls(true);
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} sedang diputar.`;
 });
 
 ritualAudio?.addEventListener("pause", () => {
+    document.querySelectorAll(".floating-audio").forEach((bar) => bar.classList.remove("is-playing"));
     saveAudioState(false);
     updateAudioControls(false);
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} dijeda.`;
 });
 
 ritualAudio?.addEventListener("ended", () => {
+    document.querySelectorAll(".floating-audio").forEach((bar) => bar.classList.remove("is-playing"));
+    sessionStorage.removeItem(audioStateKey);
     updateAudioControls(false);
     if (interfaceStatus) interfaceStatus.textContent = `${audioTrackName} selesai diputar.`;
 });
@@ -594,18 +616,17 @@ const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function moveCustomCursorToArchive(isOpen) {
-    if (!(archiveViewer instanceof HTMLDialogElement) || !customCursor) return;
+    if (!customCursor) return;
 
+    // Keep cursor under body. Moving it inside transformed dialog causes
+    // incorrect positioning and makes cursor appear detached from pointer.
     if (isOpen) {
-        archiveViewer.append(customCursor);
+        customCursor.style.zIndex = "100000";
         if (finePointer.matches && !reducedMotion.matches) {
             document.body.classList.add("cursor-ready");
         }
-    } else if (customCursor.parentNode === archiveViewer && customCursorParent) {
-        const nextSibling = customCursorNextSibling?.parentNode === customCursorParent
-            ? customCursorNextSibling
-            : null;
-        customCursorParent.insertBefore(customCursor, nextSibling);
+    } else {
+        customCursor.style.zIndex = "99999";
     }
 }
 
@@ -618,7 +639,7 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
         customCursor.classList.toggle(
             "is-hovering",
             event.target instanceof Element && Boolean(
-                event.target.closest("a, button, [role='button'], input, summary, [role='tab'], .btn-visitor-type, .btn-stepper"),
+                event.target.closest("a, button, [role='button'], input, summary, [role='tab'], .btn-visitor-type, .btn-stepper, .dramaturgi-costume-card, .dramaturgi-costume-visual, .history-archive-viewer, .history-archive-viewer-close"),
             ),
         );
     });

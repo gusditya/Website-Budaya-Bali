@@ -15,6 +15,8 @@
     --sans: "Plus Jakarta Sans", Arial, sans-serif;
     --content: 1280px;
     --ease: cubic-bezier(.2, .75, .25, 1);
+    --content-pad: clamp(20px, 4vw, 64px);
+    --surface-line: rgba(212, 175, 55, .16);
 }
 
 
@@ -3138,8 +3140,17 @@ a:focus-visible {
 
 
 .floating-audio {
-    position: relative;
-    z-index: 2;
+    position: fixed;
+    z-index: 1200;
+    left: 50%;
+    right: auto;
+    bottom: 24px;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 12px);
+    transition: opacity .28s var(--ease), visibility .28s var(--ease), transform .28s var(--ease);
     display: flex;
     width: min(448px, calc(100% - 32px));
     min-height: 62px;
@@ -3176,6 +3187,13 @@ a:focus-visible {
 }
 
 
+
+.floating-audio.is-playing {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+}
 
 .floating-audio-copy {
     display: flex;
@@ -4018,6 +4036,10 @@ body {
 
 
     .floating-audio {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
         min-height: 56px;
     }
 }
