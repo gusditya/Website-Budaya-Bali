@@ -374,6 +374,7 @@ function toggleAudioPlayer(audio, button, name) {
 localAudioButtons.forEach((button) => {
     button.addEventListener("click", () => {
         const willPlay = sanghyangAudio?.paused || sanghyangAudio?.ended;
+        if (sanghyangPlayGlyph) sanghyangPlayGlyph.textContent = willPlay ? "Ⅱ" : "▶";
         if (willPlay && ritualAudio && !ritualAudio.paused) ritualAudio.pause();
         toggleAudioPlayer(sanghyangAudio, button, "Kidung Sanghyang Dedari");
         if (sanghyangAudio && !sanghyangAudio.paused) {
@@ -388,8 +389,14 @@ sanghyangAudio?.addEventListener("play", () => {
     if (ritualAudio && !ritualAudio.paused) ritualAudio.pause();
     sanghyangPlayer?.classList.add("is-playing");
 });
-sanghyangAudio?.addEventListener("pause", () => sanghyangPlayer?.classList.remove("is-playing"));
-sanghyangAudio?.addEventListener("ended", () => sanghyangPlayer?.classList.remove("is-playing"));
+sanghyangAudio?.addEventListener("pause", () => {
+    sanghyangPlayer?.classList.remove("is-playing");
+    if (sanghyangPlayGlyph) sanghyangPlayGlyph.textContent = "▶";
+});
+sanghyangAudio?.addEventListener("ended", () => {
+    sanghyangPlayer?.classList.remove("is-playing");
+    if (sanghyangPlayGlyph) sanghyangPlayGlyph.textContent = "▶";
+});
 
 updateAudioControls(ritualAudio instanceof HTMLAudioElement && !ritualAudio.paused && !ritualAudio.ended);
 
@@ -574,6 +581,10 @@ archiveOpenButtons.forEach((button) => {
         if (archiveViewer instanceof HTMLDialogElement && !archiveViewer.open) {
             archiveOpener = button;
             archiveViewer.showModal();
+            if (customCursor && finePointer.matches && !reducedMotion.matches) {
+                archiveViewer.append(customCursor);
+                customCursor.style.zIndex = "2147483647";
+            }
             moveCustomCursorToArchive(true);
         }
     });
@@ -585,6 +596,9 @@ archiveViewer?.querySelector("[data-archive-close]")?.addEventListener("click", 
 
 archiveViewer?.addEventListener("close", () => {
     moveCustomCursorToArchive(false);
+    if (customCursor && customCursorParent && customCursor.parentNode !== customCursorParent) {
+        customCursorParent.insertBefore(customCursor, customCursorNextSibling);
+    }
     if (archiveOpener?.isConnected) archiveOpener.focus();
     archiveOpener = null;
 });
@@ -618,8 +632,6 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 function moveCustomCursorToArchive(isOpen) {
     if (!customCursor) return;
 
-    // Keep cursor under body. Moving it inside transformed dialog causes
-    // incorrect positioning and makes cursor appear detached from pointer.
     if (isOpen) {
         customCursor.style.zIndex = "100000";
         if (finePointer.matches && !reducedMotion.matches) {
@@ -659,7 +671,6 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
     });
 }
 
-
 function initCostumeGallery() {
     const viewer = document.querySelector("#costume-viewer");
     const opener = document.querySelector("[data-costume-open]");
@@ -668,7 +679,7 @@ function initCostumeGallery() {
             viewer.showModal();
             if (customCursor && finePointer.matches && !reducedMotion.matches) {
                 viewer.append(customCursor);
-                customCursor.style.zIndex = "1002";
+                customCursor.style.zIndex = "2147483647";
             }
         });
         viewer.querySelector("[data-costume-close]")?.addEventListener("click", () => viewer.close());
