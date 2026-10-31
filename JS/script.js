@@ -10,7 +10,7 @@ if (pageLoader) {
         loaderFinished = true;
         window.clearTimeout(loaderFinishTimer);
 
-        const minimumDisplayTime = 120;
+        const minimumDisplayTime = 520;
         const elapsed = performance.now() - loaderStartedAt;
         window.setTimeout(() => {
             pageLoader.classList.add("is-leaving");
@@ -117,7 +117,7 @@ const actTime = document.querySelector("[data-act-time]");
 const actImage = document.querySelector("[data-act-image]");
 const actCounter = document.querySelector(".act-feature-meta span:last-child");
 
-actTabs.forEach((tab) => {
+actTabs.forEach((tab, tabIndex) => {
     tab.addEventListener("click", () => {
         const index = Number(tab.dataset.act);
         const act = acts[index];
@@ -127,7 +127,9 @@ actTabs.forEach((tab) => {
             const selected = itemIndex === index;
             item.classList.toggle("is-active", selected);
             item.setAttribute("aria-selected", String(selected));
+            item.tabIndex = selected ? 0 : -1;
         });
+        document.querySelector("#act-panel")?.setAttribute("aria-labelledby", tab.id);
 
         if (actKicker) actKicker.textContent = act.kicker;
         if (actTitle) actTitle.textContent = act.title;
@@ -138,6 +140,18 @@ actTabs.forEach((tab) => {
             actImage.alt = act.imageAlt;
         }
         if (actCounter) actCounter.textContent = `${String(index + 1).padStart(2, "0")} / 05`;
+    });
+    tab.addEventListener("keydown", (event) => {
+        if (!actTabs.length) return;
+        let nextIndex;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (tabIndex + 1) % actTabs.length;
+        else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (tabIndex - 1 + actTabs.length) % actTabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = actTabs.length - 1;
+        else return;
+        event.preventDefault();
+        actTabs[nextIndex].click();
+        actTabs[nextIndex].focus();
     });
 });
 
@@ -581,11 +595,7 @@ archiveOpenButtons.forEach((button) => {
         if (archiveViewer instanceof HTMLDialogElement && !archiveViewer.open) {
             archiveOpener = button;
             archiveViewer.showModal();
-            if (customCursor && finePointer.matches && !reducedMotion.matches) {
-                archiveViewer.append(customCursor);
-                customCursor.style.zIndex = "2147483647";
-            }
-            moveCustomCursorToArchive(true);
+            moveCustomCursorToArchive(true, archiveViewer);
         }
     });
 });
@@ -629,16 +639,12 @@ const customCursorNextSibling = customCursor?.nextSibling;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-function moveCustomCursorToArchive(isOpen) {
+function moveCustomCursorToArchive(isOpen, dialog = null) {
     if (!customCursor) return;
-
-    if (isOpen) {
-        customCursor.style.zIndex = "100000";
-        if (finePointer.matches && !reducedMotion.matches) {
-            document.body.classList.add("cursor-ready");
-        }
-    } else {
-        customCursor.style.zIndex = "99999";
+    customCursor.classList.remove("is-hovering", "is-pressed");
+    customCursor.style.zIndex = isOpen ? "2147483647" : "99999";
+    if (isOpen && dialog && customCursor.parentNode !== dialog) {
+        dialog.append(customCursor);
     }
 }
 
@@ -648,10 +654,11 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
     document.addEventListener("pointermove", (event) => {
         customCursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
         document.body.classList.add("cursor-ready");
+
         customCursor.classList.toggle(
             "is-hovering",
             event.target instanceof Element && Boolean(
-                event.target.closest("a, button, [role='button'], input, summary, [role='tab'], .btn-visitor-type, .btn-stepper, .dramaturgi-costume-card, .dramaturgi-costume-visual, .history-archive-viewer, .history-archive-viewer-close"),
+                event.target.closest("a, button, [role='button'], input, summary, [role='tab'], .btn-visitor-type, .btn-stepper, .dramaturgi-costume-card, .dramaturgi-costume-visual, .history-archive-viewer-close"),
             ),
         );
     });
@@ -660,7 +667,7 @@ if (customCursor && finePointer.matches && !reducedMotion.matches) {
     document.addEventListener("pointerup", () => customCursor.classList.remove("is-pressed"));
     document.addEventListener("pointerout", (event) => {
         if (!event.relatedTarget) {
-            if (archiveViewer instanceof HTMLDialogElement && archiveViewer.open) return;
+            if (document.querySelector(".history-archive-viewer[open]")) return;
             document.body.classList.remove("cursor-ready");
             customCursor.classList.remove("is-hovering", "is-pressed");
         }
@@ -677,15 +684,17 @@ function initCostumeGallery() {
     if (viewer && opener instanceof HTMLButtonElement) {
         opener.addEventListener("click", () => {
             viewer.showModal();
-            if (customCursor && finePointer.matches && !reducedMotion.matches) {
-                viewer.append(customCursor);
-                customCursor.style.zIndex = "2147483647";
-            }
+            moveCustomCursorToArchive(true, viewer);
         });
-        viewer.querySelector("[data-costume-close]")?.addEventListener("click", () => viewer.close());
+        const closeButton = viewer.querySelector("[data-costume-close]");
+        closeButton?.addEventListener("click", () => viewer.close());
         viewer.addEventListener("cancel", (event) => { event.preventDefault(); viewer.close(); });
         viewer.addEventListener("close", () => {
-            if (customCursor && customCursorParent) customCursorParent.insertBefore(customCursor, customCursorNextSibling);
+            if (customCursor && customCursorParent && customCursor.parentNode !== customCursorParent) {
+                customCursorParent.insertBefore(customCursor, customCursorNextSibling);
+            }
+            moveCustomCursorToArchive(false);
+            opener.focus();
         });
         viewer.addEventListener("click", (event) => { if (event.target === viewer) viewer.close(); });
     }
@@ -803,35 +812,12 @@ if (document.readyState === "loading") {
         { question: "Apakah kawasan ramah untuk anak-anak?", answer: "Kawasan terbuka untuk keluarga, namun tetap awasi anak-anak karena beberapa jalur berada di dekat tebing." },
     ];
 
-    class SoundscapeEngine {
-        constructor() { this.context = null; this.source = null; this.gain = null; }
-        start() {
-            if (!this.context) {
-                this.context = new (window.AudioContext || window.webkitAudioContext)();
-                this.gain = this.context.createGain();
-                this.gain.gain.value = 0.035;
-                this.gain.connect(this.context.destination);
-                const buffer = this.context.createBuffer(1, this.context.sampleRate * 2, this.context.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let index = 0; index < data.length; index += 1) data[index] = (Math.random() * 2 - 1) * 0.18;
-                this.source = this.context.createBufferSource();
-                this.source.buffer = buffer;
-                this.source.loop = true;
-                this.source.connect(this.gain);
-                this.source.start();
-            }
-            return this.context.resume();
-        }
-        stop() { return this.context?.suspend(); }
-    }
-
     const mapContainer = document.querySelector("#mapPinsContainer");
     const mapPopup = document.querySelector("#mapSpotPopup");
+    let lastMapOpener = null;
     const faqContainer = document.querySelector("#faqContainer");
     const bookingModal = document.querySelector("#bookingModal");
     const bookingForm = document.querySelector("#bookingForm");
-    const soundscapeButton = document.querySelector("[data-audio-toggle], [data-soundscape-toggle]");
-    const soundscape = new SoundscapeEngine();
 
     const setMapSpot = (spot) => {
         if (!spot) return;
@@ -843,6 +829,8 @@ if (document.readyState === "loading") {
         const rules = document.querySelector("#popupRulesBox");
         if (rules) rules.replaceChildren(...spot.rules.map((rule) => { const item = document.createElement("div"); item.className = "component"; item.textContent = rule; return item; }));
         mapPopup?.classList.remove("is-hidden");
+        mapPopup?.setAttribute("aria-hidden", "false");
+        window.setTimeout(() => document.querySelector("#popupTitle")?.focus(), 0);
     };
 
     if (mapContainer && mapPopup) {
@@ -854,12 +842,38 @@ if (document.readyState === "loading") {
             pin.style.top = `${spot.y}%`;
             pin.setAttribute("aria-label", spot.title);
             pin.textContent = "•";
-            pin.addEventListener("click", () => setMapSpot(spot));
+            pin.addEventListener("click", () => {
+                lastMapOpener = pin;
+                setMapSpot(spot);
+            });
             mapContainer.append(pin);
         });
-        document.querySelector("#btnClosePopup")?.addEventListener("click", () => mapPopup.classList.add("is-hidden"));
-        mapPopup.addEventListener("click", (event) => { if (event.target === mapPopup) mapPopup.classList.add("is-hidden"); });
-        [["#mapTabAmphitheater", "amphitheater"], ["#mapTabSacred", "sacred"], ["#mapTabTrail", "trail"]].forEach(([selector, id]) => document.querySelector(selector)?.addEventListener("click", () => setMapSpot(MAP_SPOTS.find((spot) => spot.id === id))));
+        const closeMapPopup = () => {
+            mapPopup.classList.add("is-hidden");
+            mapPopup.setAttribute("aria-hidden", "true");
+            lastMapOpener?.focus();
+        };
+        document.querySelector("#btnClosePopup")?.addEventListener("click", closeMapPopup);
+        mapPopup.addEventListener("click", (event) => { if (event.target === mapPopup) closeMapPopup(); });
+        [["#mapTabAmphitheater", "amphitheater"], ["#mapTabSacred", "sacred"], ["#mapTabTrail", "trail"]].forEach(([selector, id], index, tabs) => {
+            const tab = document.querySelector(selector);
+            tab?.addEventListener("click", () => {
+                lastMapOpener = tab;
+                setMapSpot(MAP_SPOTS.find((spot) => spot.id === id));
+            });
+            tab?.addEventListener("keydown", (event) => {
+                let nextIndex;
+                if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (index + 1) % tabs.length;
+                else if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (index - 1 + tabs.length) % tabs.length;
+                else if (event.key === "Home") nextIndex = 0;
+                else if (event.key === "End") nextIndex = tabs.length - 1;
+                else return;
+                event.preventDefault();
+                const nextTab = document.querySelector(tabs[nextIndex][0]);
+                nextTab?.focus();
+                nextTab?.click();
+            });
+        });
     }
 
     if (faqContainer) {
@@ -913,10 +927,20 @@ if (document.readyState === "loading") {
         }
         if (event.key !== "Escape") return;
         if (bookingModal && !bookingModal.classList.contains("is-hidden")) toggleBooking(false);
-        if (mapPopup && !mapPopup.classList.contains("is-hidden")) mapPopup.classList.add("is-hidden");
+        if (mapPopup && !mapPopup.classList.contains("is-hidden")) {
+            mapPopup.classList.add("is-hidden");
+            mapPopup.setAttribute("aria-hidden", "true");
+            lastMapOpener?.focus();
+        }
     });
 
     if (bookingForm) {
+        const bookingDateInput = document.querySelector("#bookingDateInput");
+        if (bookingDateInput) {
+            const today = new Date();
+            const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+            bookingDateInput.min = localToday;
+        }
         let isForeigner = false;
         const btnDomestik = document.querySelector("#btnVisitorDomestik");
         const btnForeigner = document.querySelector("#btnVisitorForeigner");
@@ -934,18 +958,41 @@ if (document.readyState === "loading") {
         btnDomestik?.addEventListener("click", () => {
             isForeigner = false;
             btnDomestik.classList.add("is-active");
+            btnDomestik.setAttribute("aria-pressed", "true");
             btnForeigner?.classList.remove("is-active");
+            btnForeigner?.setAttribute("aria-pressed", "false");
             updateTotal();
         });
         btnForeigner?.addEventListener("click", () => {
             isForeigner = true;
             btnForeigner.classList.add("is-active");
+            btnForeigner.setAttribute("aria-pressed", "true");
             btnDomestik?.classList.remove("is-active");
+            btnDomestik?.setAttribute("aria-pressed", "false");
             updateTotal();
         });
         [["#btnMinusAdult", "adult", -1], ["#btnPlusAdult", "adult", 1], ["#btnMinusKecak", "kecak", -1], ["#btnPlusKecak", "kecak", 1]].forEach(([selector, key, change]) => document.querySelector(selector)?.addEventListener("click", () => { counts[key] = Math.max(0, counts[key] + change); document.querySelector(`#count${key[0].toUpperCase()}${key.slice(1)}`).textContent = counts[key]; updateTotal(); }));
-        bookingForm.addEventListener("submit", (event) => { event.preventDefault(); if (!bookingForm.reportValidity()) return; document.querySelector("#passCustName").textContent = document.querySelector("#custName").value; document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent; document.querySelector("#passBookingCode").textContent = `REQ-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`; document.querySelector("#bookingNotice")?.replaceChildren(document.createTextNode("Permintaan tersimpan sebagai simulasi. Hubungi kanal resmi pengelola untuk konfirmasi tiket dan pembayaran.")); bookingForm.classList.add("is-hidden"); document.querySelector("#ticketPassView")?.classList.remove("is-hidden"); });
+        bookingForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const dateInput = document.querySelector("#bookingDateInput");
+            if (!bookingForm.reportValidity()) return;
+            const today = new Date();
+            const localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+            if (dateInput?.value && dateInput.value < localToday) {
+                dateInput.setCustomValidity("Pilih tanggal hari ini atau setelahnya.");
+                dateInput.reportValidity();
+                dateInput.setCustomValidity("");
+                return;
+            }
+            document.querySelector("#passCustName").textContent = document.querySelector("#custName").value;
+            document.querySelector("#passTotalAmount").textContent = document.querySelector("#bookingGrandTotal").textContent;
+            document.querySelector("#passBookingCode").textContent = `SIM-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+            document.querySelector("#bookingNotice")?.replaceChildren(document.createTextNode("Permintaan tersimpan sebagai simulasi. Belum dibayar dan belum menjadi tiket resmi. Hubungi kanal resmi pengelola untuk konfirmasi."));
+            bookingForm.classList.add("is-hidden");
+            const ticketPass = document.querySelector("#ticketPassView");
+            ticketPass?.classList.remove("is-hidden");
+            ticketPass?.focus();
+        });
     }
 
-    soundscapeButton?.addEventListener("click", () => { const active = soundscapeButton.getAttribute("aria-pressed") === "true"; (active ? soundscape.stop() : soundscape.start()).catch?.(() => {}); soundscapeButton.setAttribute("aria-pressed", String(!active)); });
 })();

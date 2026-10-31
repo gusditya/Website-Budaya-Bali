@@ -3432,7 +3432,7 @@ html {
     }
 
     .panduan-page .site-header .menu-toggle {
-        display: inline-flex !important;
+        display: grid !important;
     }
 }
 

@@ -192,9 +192,30 @@
 .audio-play,
 .audio-more,
 .menu-toggle,
-.act-tab {
+.act-tab,
+.panduan-popup-close,
+.btn-stepper,
+.btn-visitor-type {
     min-width: 44px;
     min-height: 44px;
+}
+
+body {
+    text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 959px) {
+    .site-header .nav-pill {
+        display: none !important;
+    }
+
+    .site-header .menu-toggle {
+        display: grid !important;
+    }
+
+    .site-header .nav-pill.is-open {
+        display: grid !important;
+    }
 }
 
 img {

@@ -3618,7 +3618,7 @@ body {
     }
 
     .site-header .menu-toggle {
-        display: inline-flex !important;
+        display: grid !important;
     }
 }
 

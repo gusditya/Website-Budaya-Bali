@@ -1919,21 +1919,47 @@ a:focus-visible {
 
 .history-archive-viewer-close {
     display: grid;
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
     place-items: center;
+    align-self: flex-start;
+    padding: 0;
     border: 1px solid rgba(245, 230, 207, .22);
     border-radius: 50%;
     background: var(--panel);
     color: var(--cream);
     cursor: pointer;
     font: 300 28px/1 var(--sans);
+    transition: transform .2s var(--ease), background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
 
-.history-archive-viewer-close:hover {
+.history-archive-viewer-close svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    pointer-events: none;
+    transition: transform .2s var(--ease), stroke-width .2s ease;
+}
+
+.history-archive-viewer-close:hover,
+.history-archive-viewer-close:focus-visible {
     border-color: var(--gold);
-    color: var(--gold);
+    background: var(--gold);
+    color: var(--ink);
+    box-shadow: 0 0 0 5px rgba(229, 169, 82, .22), 0 8px 20px rgba(0, 0, 0, .28);
+    outline: none;
+    transform: scale(1.08);
+}
+
+.history-archive-viewer-close:hover svg,
+.history-archive-viewer-close:focus-visible svg {
+    stroke-width: 2.4;
+    transform: scale(1.12);
 }
 
 .history-archive-viewer-content {
@@ -3879,7 +3905,11 @@ a:focus-visible {
     }
 
     .nav-pill {
-        display: flex !important;
+        display: none !important;
+    }
+
+    .menu-toggle {
+        display: grid !important;
     }
 }
 

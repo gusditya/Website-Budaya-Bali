@@ -811,7 +811,7 @@ a:focus-visible {
 }
 
 .dramaturgi-main {
-    padding-top: 68px;
+    padding-top: 0;
 }
 
 .dramaturgi-hero {
@@ -1103,7 +1103,7 @@ a:focus-visible {
 @media (max-width: 800px) {
 
     .dramaturgi-main {
-        padding-top: 62px;
+        padding-top: 0;
     }
 
     .dramaturgi-hero {
@@ -1120,7 +1120,7 @@ a:focus-visible {
 @media (max-width: 560px) {
 
     .dramaturgi-main {
-        padding-top: 62px;
+        padding-top: 0;
     }
 
     .dramaturgi-hero {
@@ -1994,6 +1994,12 @@ a:focus-visible {
     border: 1px solid rgba(229, 169, 82, .32);
     border-radius: 11px;
     background: rgba(229, 169, 82, .1);
+    color: var(--gold);
+}
+
+.dramaturgi-costume-icon-crown {
+    border-color: rgba(229, 169, 82, .45);
+    background: rgba(229, 169, 82, .14);
     color: var(--gold);
 }
 
@@ -3294,7 +3300,7 @@ a:focus-visible {
 
 .dramaturgi-page .dramaturgi-hero {
     min-height: 0;
-    padding-top: 30px;
+    padding-top: 98px;
     padding-bottom: 72px;
 }
 
@@ -3450,7 +3456,7 @@ a:focus-visible {
 @media (max-width: 800px) {
 
     .dramaturgi-page .dramaturgi-hero {
-        padding: 28px 24px 64px;
+        padding: 90px 24px 64px;
     }
 
     .dramaturgi-page .dramaturgi-editorial-intro {
@@ -3481,7 +3487,7 @@ a:focus-visible {
 @media (max-width: 560px) {
 
     .dramaturgi-page .dramaturgi-hero {
-        padding: 24px 18px 56px;
+        padding: 86px 18px 56px;
     }
 
     .dramaturgi-page .dramaturgi-editorial-intro {
@@ -4742,12 +4748,8 @@ a:focus-visible {
 }
 
 .history-archive-viewer {
-    position: fixed;
-    inset: 50% auto auto 50%;
-    transform: translate(-50%, -50%);
     width: min(980px, calc(100% - 32px));
     max-width: none;
-    margin: 0;
     max-height: min(88dvh, 900px);
     padding: 0;
     overflow: auto;
@@ -4756,16 +4758,6 @@ a:focus-visible {
     background: var(--ink-2);
     color: var(--cream);
     box-shadow: 0 28px 90px rgba(0, 0, 0, .6);
-}
-
-.history-archive-viewer[open] {
-    display: block;
-}
-
-.history-archive-viewer>.custom-cursor {
-    position: fixed !important;
-    z-index: 2147483647 !important;
-    pointer-events: none !important;
 }
 
 .history-archive-viewer::backdrop {
@@ -4800,23 +4792,31 @@ a:focus-visible {
 
 .history-archive-viewer-close {
     display: grid;
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
     place-items: center;
+    align-self: flex-start;
+    padding: 0;
     border: 1px solid rgba(245, 230, 207, .22);
     border-radius: 50%;
     background: var(--panel);
     color: var(--cream);
     cursor: pointer;
     font: 300 28px/1 var(--sans);
+    transition: transform .2s var(--ease), background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
 
-.history-archive-viewer-close {
-    position: relative;
-    z-index: 2;
-    cursor: pointer;
-    transition: transform .2s var(--ease), border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease;
+.history-archive-viewer-close svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    pointer-events: none;
+    transition: transform .2s var(--ease), stroke-width .2s ease;
 }
 
 .history-archive-viewer-close:hover,
@@ -4824,17 +4824,15 @@ a:focus-visible {
     border-color: var(--gold);
     background: var(--gold);
     color: var(--ink);
-    box-shadow: 0 0 0 4px rgba(229, 169, 82, .2), 0 8px 20px rgba(0, 0, 0, .28);
-    transform: scale(1.08);
+    box-shadow: 0 0 0 5px rgba(229, 169, 82, .22), 0 8px 20px rgba(0, 0, 0, .28);
     outline: none;
+    transform: scale(1.08);
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-    .history-archive-viewer-close:hover,
-    .history-archive-viewer-close:focus-visible {
-        transform: scale(1.04);
-    }
+.history-archive-viewer-close:hover svg,
+.history-archive-viewer-close:focus-visible svg {
+    stroke-width: 2.4;
+    transform: scale(1.12);
 }
 
 .history-archive-viewer-content {
@@ -4843,49 +4841,6 @@ a:focus-visible {
     align-items: center;
     gap: clamp(20px, 4vw, 38px);
     padding-top: 24px;
-}
-
-.history-archive-viewer {
-    transform: translate(-50%, -50%) !important;
-    overflow: hidden;
-}
-
-.history-archive-viewer:hover,
-.history-archive-viewer:focus-within {
-    transform: translate(-50%, -50%) !important;
-}
-
-.history-archive-viewer .history-archive-viewer-inner,
-.history-archive-viewer .history-archive-viewer-content,
-.history-archive-viewer .history-archive-viewer-close {
-    transform: none !important;
-}
-
-.history-archive-viewer .history-archive-viewer-close {
-    position: relative;
-    z-index: 10;
-    display: grid;
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
-    place-items: center;
-    cursor: pointer !important;
-    border: 1px solid rgba(245, 230, 207, .35) !important;
-    border-radius: 50%;
-    background: var(--panel) !important;
-    color: var(--cream) !important;
-    transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease !important;
-}
-
-.history-archive-viewer .history-archive-viewer-close:hover,
-.history-archive-viewer .history-archive-viewer-close:focus-visible {
-    background: var(--gold) !important;
-    border-color: var(--gold) !important;
-    color: var(--ink) !important;
-    box-shadow: 0 0 0 4px rgba(229, 169, 82, .22) !important;
-    cursor: pointer !important;
-    outline: none !important;
-    transform: none !important;
 }
 
 .history-archive-viewer-figure {
@@ -5474,7 +5429,7 @@ body {
     }
 
     .dramaturgi-page .site-header .menu-toggle {
-        display: inline-flex !important;
+        display: grid !important;
     }
 }
 

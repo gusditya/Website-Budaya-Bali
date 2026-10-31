@@ -16,6 +16,7 @@
     <meta name="twitter:description" content="Mengenal filosofi, suara, dan kisah sakral Tari Kecak di Pura Luhur Uluwatu.">
     <title>Svara Bali — Kidung Sakral Api &amp; Trans</title>
     <script>document.documentElement.classList.add("has-page-loader");</script>
+    <noscript><style>.page-loader{display:none!important}</style></noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -80,7 +81,7 @@
                 <div class="hero-actions">
                     <a class="button button-primary" href="#filosofi">Mulai eksplorasi <span
                             aria-hidden="true">↗</span></a>
-                    <button class="button button-quiet" type="button" data-audio-toggle aria-pressed="false">
+                    <button class="button button-quiet" type="button" data-audio-toggle aria-pressed="false" aria-label="Putar atau jeda audio ritual">
                         <span class="audio-symbol" aria-hidden="true">♫</span>
                         <span data-audio-label>Audio Full Kecak</span>
                         <small>52:48</small>
@@ -249,7 +250,7 @@
                         <div class="act-dots" aria-label="Lima babak"><span
                                 class="active">I</span><span>II</span><span>III</span><span>IV</span><span>V</span>
                         </div>
-                        <span>Lakon berkelanjutan 65 menit</span>
+                        <span>Lakon berkelanjutan 60 menit</span>
                         <a href="#panca-babak">Jelajahi seluruh babak <b>→</b></a>
                     </div>
                 </div>
@@ -266,29 +267,29 @@
                             Simfoni vokal tujuh puluh pria bergerak serasi dengan detik-detik terbenamnya surya.</p>
                     </div>
                     <div class="time-card"><span class="round-icon">◦</span>
-                        <div><small>Sinkronisasi cahaya</small><strong>18:00 – 19:05 WITA</strong></div><span
+                        <div><small>Sinkronisasi cahaya</small><strong>18:00 – 19:00 WITA</strong></div><span
                             class="time-divider"></span><span class="time-note">Transisi lembayung senja → api
                             gelap</span>
                     </div>
                 </div>
                 <div class="act-track" role="tablist" aria-label="Pilih babak Tari Kecak">
-                    <button class="act-tab is-active" type="button" role="tab" aria-selected="true"
-                        data-act="0"><span>I</span><small>18:00 · Senja
+                    <button id="act-tab-0" class="act-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="act-panel"
+                        tabindex="0" data-act="0"><span>I</span><small>18:00 · Senja
                             awal</small><strong>Panyembrama</strong></button>
-                    <button class="act-tab" type="button" role="tab" aria-selected="false"
-                        data-act="1"><span>II</span><small>18:15 · Lembayung</small><strong>Hutan
+                    <button id="act-tab-1" class="act-tab" type="button" role="tab" aria-selected="false" aria-controls="act-panel"
+                        tabindex="-1" data-act="1"><span>II</span><small>18:15 · Lembayung</small><strong>Hutan
                             Dandaka</strong></button>
-                    <button class="act-tab" type="button" role="tab" aria-selected="false"
-                        data-act="2"><span>III</span><small>18:30 · Temaram</small><strong>Kijang
+                    <button id="act-tab-2" class="act-tab" type="button" role="tab" aria-selected="false" aria-controls="act-panel"
+                        tabindex="-1" data-act="2"><span>III</span><small>18:30 · Temaram</small><strong>Kijang
                             Kencana</strong></button>
-                    <button class="act-tab" type="button" role="tab" aria-selected="false"
-                        data-act="3"><span>IV</span><small>18:45 · Senja gelap</small><strong>Penculikan
+                    <button id="act-tab-3" class="act-tab" type="button" role="tab" aria-selected="false" aria-controls="act-panel"
+                        tabindex="-1" data-act="3"><span>IV</span><small>18:45 · Senja gelap</small><strong>Penculikan
                             Sita</strong></button>
-                    <button class="act-tab" type="button" role="tab" aria-selected="false"
-                        data-act="4"><span>V</span><small>19:00 · Ujian api</small><strong>Klimaks
+                    <button id="act-tab-4" class="act-tab" type="button" role="tab" aria-selected="false" aria-controls="act-panel"
+                        tabindex="-1" data-act="4"><span>V</span><small>19:00 · Ujian api</small><strong>Klimaks
                             sakral</strong></button>
                 </div>
-                <article class="act-feature panel" aria-live="polite">
+                <article id="act-panel" class="act-feature panel" role="tabpanel" aria-labelledby="act-tab-0" tabindex="0" aria-live="polite">
                     <div class="act-feature-image">
                         <img src="assets/pictures/hero-ceremony.png" alt="Pertunjukan Kecak di tebing Uluwatu"
                             data-act-image>
@@ -304,7 +305,7 @@
                         </div>
                     </div>
                 </article>
-                <div class="act-notes"><span>◉ Durasi: 65 menit perjalanan dramatik penuh tanpa
+                <div class="act-notes"><span>◉ Durasi: 60 menit perjalanan dramatik penuh tanpa
                             jeda</span><span>Panggung terbuka pelataran batu <i>•</i> Sinkronisasi senja Uluwatu</span>
                 </div>
             </div>
@@ -319,7 +320,7 @@
                         Uluwatu merupakan salah satu pura <i>Sad Kahyangan</i> penjaga utama pulau Bali, menepis energi
                         negatif dari arah barat daya Samudra Hindia.</p>
                     <div class="stat-cards">
-                        <article><small>Senja tebing</small><strong>18:14</strong><span>Cakrawala emas</span></article>
+                        <article><small>Senja tebing</small><strong>18:00</strong><span>Cakrawala emas</span></article>
                         <article><small>Alun samudra</small><strong>1.4m</strong><span>Resonansi bass mendalam</span>
                         </article>
                         <article><small>Angin</small><strong>12 knot</strong><span>Lepas pantai selatan</span></article>
@@ -348,8 +349,7 @@
                     <div class="map-caption">
                         <h3>Pura Luhur Uluwatu</h3>
                         <p>Pecatu, Kuta Selatan, Kabupaten Badung, Bali</p>
-                        <div><span>Pintu masuk dibuka: 17:00 WITA</span><strong>Kapasitas pelataran: 800
-                                penonton</strong></div>
+                        <div><span>Pintu masuk dibuka: 17:00 WITA</span><strong>Kuota pelataran: terbatas</strong></div>
                     </div>
                 </article>
             </div>
